@@ -1,0 +1,16 @@
+
+th.tableheading{
+    text-align: left;
+    background-color: #00135d;
+    color: #ffb400;
+    padding: 10px;
+
+}
+
+td{
+    padding: 10px;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}

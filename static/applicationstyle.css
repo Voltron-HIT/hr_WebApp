@@ -12,6 +12,10 @@
     font-weight: 100;
 }
 
+body{
+    font-family: 'Source Serif Pro', serif;
+}
+
 .wrapper{
     padding: 30px;
     
