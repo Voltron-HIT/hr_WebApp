@@ -10,10 +10,9 @@ app = Flask(__name__)
 #Cross-Site Request Forgery prevention
 app.config['SECRET_KEY'] = 'secret key'
 #global variables
-dbUsername = 'admin'
-cost = 11
 salt = b'$2b$11$Za4hFNuzn3Rvw7gLnUVZCu'
-dbPassword = b'$2b$11$Za4hFNuzn3Rvw7gLnUVZCuv7B3iGvalQ6nMUss0o7/9OcsoBDc/Hi'
+
+
 
 #Unrouted functions
 def login_required(f):
@@ -40,6 +39,13 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = bcrypt.hashpw(request.form['password'].encode('utf-8'), salt)
+
+        user = db.Credentials.find({'username': username})
+        for i in user:
+            dbUsername = i['username']
+            dbPassword = bytes(i['password'].encode('utf-8'))
+
+
 
         if username != dbUsername or  bcrypt.hashpw(request.form['password'].encode('utf-8'), password) != dbPassword:
             error = 'Invalid Credentials. Please try again.'
