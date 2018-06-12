@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HIT Application</title>
+    <link rel="stylesheet" href="../static/applicationstyle.css">
+</head>
+<body>
+    <div class="heading">
+        <h1>H.I.T Job Application Form</h1>
+    </div>
+    <div class="wrapper">
+        <form action="/asas">
+            <div class="detail-group">
+                <h3>Personal Information</h3>
+                <div class="details">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td> <label for="firstname">Firstname: </label> </td>
+                                <td> <input type="text" required placeholder="John"> </td>
+                            </tr>
+                            <tr>
+                                <td> <label for="surname">Surname: </label> </td>
+                                <td> <input type="text" required placeholder="Doe"> </td>
+                            </tr>
+                            <tr>
+                                <td> <label for="DOB">Date Of Birth:</label> </td>
+                                <td> <input name="DOB" type="date" required> </td>
+                            </tr>
+                            <tr>
+                                <td>  <label for="Sex">Sex:</label> </td>
+                                <td>
+                                    <select name="Sex" id="">
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>        
+                </div>
+            </div>
+            <div class="detail-group">
+                    <h3>Contact Information</h3>
+                    <div class="details">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td> <label for="email">Email: </label> </td>
+                                    <td> <input type="email" required placeholder="John@gmail.com"> </td>
+                                </tr>
+                                <tr>
+                                    <td> <label for="phone1">Phone 1: </label> </td>
+                                    <td>  <input type="text" name="phone1" required placeholder="0772334661"> </td>
+                                </tr>
+                                <tr>
+                                    <td> <label for="phone2">Phone 2: </label> </td>
+                                    <td> <input type="text" name="phone2" placeholder="0772334661"> </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: top"> <label for="address">Address:</label> </td> 
+                                    <td> <textarea name="address" id="" cols="30" rows="6"></textarea> </td>           
+                                </tr>
+                            </tbody>
+                        </table>   
+                    </div>
+            </div>
+            <div class="detail-group">
+                    <h3>Academic Qualification</h3>
+                    <div class="details" id="qualification">
+                            <div class="field">
+                                <label for="qualification">Qualification: </label>
+                                <input name="qualification" type="text" placeholder="5 O levels including English and Maths">
+                                <label for="awardingInstitute">Awarding Institute: </label>
+                                <input name="awardingInstitute" type="text" placeholder="ZIMSEC">
+                                <label for="certificate">Attach Certificate:</label>
+                                <input type="file" name="certificate" id="" required>                    
+                            </div>
+                            <span class="button" id="addqualification" onclick="addQualificationField()">Add Another</span>
+                    </div>
+            </div>
+            <div class="detail-group">
+                    <h3>Work Experience</h3>
+                    <div class="details" id="workexperience">
+                            <div class="field">
+                                <label for="organisation">Organisation: </label>
+                                <input name="organisation" type="text" placeholder="Harare Institute Of Technology">
+                                <label for="position">Position: </label>
+                                <input name="position" type="text" placeholder="Receptionist">
+                                <label for="time-frame">Time Frame: </label>
+                                <input name="time-frame" type="text" placeholder="2000-2002">
+                            </div>
+                            <span class="button" id="add" onclick="addWorkExperienceField()">Add Another</span>
+                    </div>
+            </div>
+
+            <button class="button submit-button" type="submit">Apply</button>
+
+        </form>
+    </div>
+</body>
+
+<script>
+    // function addFields(){
+    //     var qualifications = document.getElementById('qualifications')
+    //     var number = document.getElementById('number')
+    //     var numberOfElements = number.value
+    //     while (qualifications.hasChildNodes()) {
+    //             qualifications.removeChild(qualifications.lastChild);
+    //         }
+    //     for (i=0;i<numberOfElements;i++){
+    //             qualifications.appendChild(document.createTextNode("Qualification " + (i+1)));
+    //             var input = document.createElement("input");
+    //             input.type = "text";
+    //             input.id = "qualification" + (i+1)
+    //             qualifications.appendChild(input);
+    //             qualifications.appendChild(document.createElement("br"));
+    //     }
+    // }
+    
+    function addWorkExperienceField(){
+        var button = document.getElementById('add')
+        var workexperience = document.getElementById('workexperience')
+        var fieldNumbers = workexperience.childElementCount - 1;
+        var cloneElement = workexperience.firstElementChild.cloneNode(true)
+        cloneElement.childNodes[3].name = "organisation" + fieldNumbers
+        cloneElement.childNodes[7].name = "position" + fieldNumbers
+        cloneElement.childNodes[11].name = "time-frame" + fieldNumbers
+        workexperience.insertBefore(cloneElement,button)
+    }
+
+    function addQualificationField(){
+        var button = document.getElementById('addqualification')
+        var qualification = document.getElementById('qualification')
+        var fieldNumbers = qualification.childElementCount - 1;
+        var cloneElement = qualification.firstElementChild.cloneNode(true)
+        cloneElement.childNodes[3].name = "qualification" + fieldNumbers
+        cloneElement.childNodes[7].name = "awardingInstitute" + fieldNumbers
+        cloneElement.childNodes[11].name = "certificate" + fieldNumbers
+        qualification.insertBefore(cloneElement,button)
+    }
+
+
+
+
+</script>
+
+
+</html>

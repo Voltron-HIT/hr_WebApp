@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../static/applicationstyle.css">
+    <link rel="stylesheet" href="../static/addvacancystyle.css">
+    <title>Add Vacancy</title>
+</head>
+<body>
+    <div class="heading">
+        <h1>Add Vacancy</h1>
+    </div>
+
+    <div class="wrapper">
+        <form>
+                <div class="detail-group">
+                    <h3>Vacancy Details</h3>
+                    <div class="details">
+                        <table>
+                            <tr>
+                                <td> <label for="post">Post: </label> </td>
+                                <td>  <input type="text" name="post" id="" placeholder="Lecturer" required> </td>
+                            </tr>
+                            <tr>
+                                <td> <label for="department">Department: </label> </td>
+                                <td> <input type="text" name="department" id="" placeholder="Software Engineering" required>  </td>
+                            </tr>
+                            <tr>
+                                <td> <label for="deadline">Deadline: </label> </td>
+                                <td> <input type="date" name="deadline" id="" required> </td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align: top"> Minimum Requirements: </td>
+                                <td> <textarea name="requirement" id="" cols="50" rows="10"></textarea>  </td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align: top"> Responsibilities: </td>
+                                <td> <textarea name="responsibilities" id="" cols="50" rows="10"></textarea> </td>
+                            </tr>
+                        </table>
+                        
+                    </div>
+                </div>
+                <div class="detail-group">
+                    <h3>Adjudicator Details</h3>
+                    <div class="details">
+                        <table>
+                            <tr>
+                                <td> <label for="name">Name: </label> </td>
+                                <td> <input type="text" name="name" id="" placeholder="John Dube">  </td>
+                            </tr>
+                            <tr>
+                                <td> <label for="adjudicatorpost">Adjudicator Post: </label> </td>
+                                <td>  <input type="text" name="adjudicatorpost" id="" placeholder="Chairperson"> </td>
+                            </tr>
+                            <tr>
+                                <td> <label for="adjudicatordepartment">Adjudicator Department: </label> </td>
+                                <td> <input type="text" name="adjudicatordepartment" id="" placeholder="Software Engineering"> </td>
+                            </tr>
+                            <tr>
+                                <td> <label for="interviewdate">Interview Date: </label> </td>
+                                <td> <input type="date" name="interviewdate" id=""> </td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                </div>
+                <button class="button submit-button" type="submit"> Post vacancy </button>
+        </form>
+        
+    </div>
+
+</body>
+</html>
