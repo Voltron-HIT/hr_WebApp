@@ -2,24 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Log In</title>
-    <link rel="stylesheet" href="../static/loginstyle.css">
+    <link rel="stylesheet" href="..\static\loginstyle.css">
 </head>
 <body>
     <div class="wrapper">
-        <form action="{{url_for('login')}}" method="post">
+        <form action="/login">
             <center><img src="{{url_for('static', filename='img/hitlogo.png')}}" alt="" srcset="" height="120px" width="300px"></center>
             <h3> {{System_Name}} Log In </h3>
-            <input type="text" name="username" id="" value="{{ request.form.username }}" required placeholder="Username" autocomplete="off">
-            <input type="password" value="{{ request.form.password }}" name="password" id="" required placeholder="Password">
+            <input type="text" name="username" id="" required placeholder="Username">
+            <input type="password" name="password" id="" required placeholder="Password">
             <h4 class="error">{{Error_Message}}</h4>
             <button class="button" type="submit">Log In</button>
         </form>
-        <a id="password-reset" style="text-align: center;" href="{{url_for('resetpassword')}}">Forgot Password?</a>
+        <a id="password-reset" style="text-align: center;" href="{{url_for('resetPassword')}}">Forgot Password?</a>
     </div>
-
+    
 </body>
 </html>

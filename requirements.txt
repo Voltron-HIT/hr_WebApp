@@ -1,0 +1,7 @@
+flask==0.12.2
+Jinja2==2.10
+itsdangerous==0.24
+Werkzeug==0.14.1
+bcrypt==3.1.4
+flask_mail==0.9.1
+pymongo==3.6.1
