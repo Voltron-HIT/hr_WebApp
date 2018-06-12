@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>HIT Application</title>
+    <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro" rel="stylesheet">
     <link rel="stylesheet" href="../static/applicationstyle.css">
 </head>
 <body>
@@ -104,23 +105,7 @@
 </body>
 
 <script>
-    // function addFields(){
-    //     var qualifications = document.getElementById('qualifications')
-    //     var number = document.getElementById('number')
-    //     var numberOfElements = number.value
-    //     while (qualifications.hasChildNodes()) {
-    //             qualifications.removeChild(qualifications.lastChild);
-    //         }
-    //     for (i=0;i<numberOfElements;i++){
-    //             qualifications.appendChild(document.createTextNode("Qualification " + (i+1)));
-    //             var input = document.createElement("input");
-    //             input.type = "text";
-    //             input.id = "qualification" + (i+1)
-    //             qualifications.appendChild(input);
-    //             qualifications.appendChild(document.createElement("br"));
-    //     }
-    // }
-    
+    // function to add dynamically add fields to work experience
     function addWorkExperienceField(){
         var button = document.getElementById('add')
         var workexperience = document.getElementById('workexperience')
@@ -131,7 +116,7 @@
         cloneElement.childNodes[11].name = "time-frame" + fieldNumbers
         workexperience.insertBefore(cloneElement,button)
     }
-
+    // function to add dynamically add fields to qualifications
     function addQualificationField(){
         var button = document.getElementById('addqualification')
         var qualification = document.getElementById('qualification')

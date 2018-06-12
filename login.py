@@ -12,8 +12,8 @@ app.config['SECRET_KEY'] = 'secret key'
 #global variables
 dbUsername = 'admin'
 cost = 11
-# salt = b'$2b$11$Za4hFNuzn3Rvw7gLnUVZCu'
-# dbPassword = b'$2b$11$Za4hFNuzn3Rvw7gLnUVZCuv7B3iGvalQ6nMUss0o7/9OcsoBDc/Hi'
+salt = b'$2b$11$Za4hFNuzn3Rvw7gLnUVZCu'
+dbPassword = b'$2b$11$Za4hFNuzn3Rvw7gLnUVZCuv7B3iGvalQ6nMUss0o7/9OcsoBDc/Hi'
 
 #Unrouted functions
 def login_required(f):
@@ -33,7 +33,7 @@ def login():
     error = ""
     if request.method == 'POST':
         username = request.form['username']
-        password = bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt(cost))
+        password = bcrypt.hashpw(request.form['password'].encode('utf-8'), salt)
 
         if username != dbUsername or  bcrypt.hashpw(request.form['password'].encode('utf-8'), password) != dbPassword:
             error = 'Invalid Credentials. Please try again.'
