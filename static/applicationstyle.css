@@ -1,33 +1,67 @@
 * {
     margin: 0;
 }
-.heading{
-    height: 50px;
+.nav-bar{
+    height: 65px;   
     background-color: #00135d;
 }
-.heading > h1{
-    padding: 13px;
-    color: #ffb400;
-    font-size: 1.5em;
+
+
+
+.heading > span{
+    color: #00135d;
     font-weight: 100;
+    text-align: center;
+    font-size: 32px;
+}
+
+.heading > img{
+    vertical-align: bottom;
+    height: 72px;
+    padding-top: 13px;
+    padding-left: 13px;
+}
+
+.material-icons.md-48 { 
+    font-size: 62px;
+    color:  #ffb400;
 }
 
 body{
     font-family: 'Source Serif Pro', sans-serif;
+    font-size: 20px;
 }
 
 .wrapper{
-    padding: 30px;
-    
+    padding:10px 30px;
+    max-width: 1280px;
+    min-width: 320px;
 }
 
-input[type = 'text'], input[type = 'file']{
-  /* width: 100%; */
-  padding-top: 5px;
-  padding-bottom:5px;
+
+td.input{
+    width: 80%;
 }
+
+textarea, select, input[type = 'text'], input[type = 'email'], input[type = 'date'] ,input[type = 'file']{
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 5px;
+}
+
+textarea,input[type='text'], input[type = 'email'], input[type = 'date']{
+    border: 1px solid #00135d;
+    border-radius: 3px;
+}
+
+textarea:focus, input[type='text']:focus , input[type = 'email']:focus, input[type = 'date']:focus{
+    border-color: #ffb400;
+    outline-color: #ffb400;
+}
+
 
 .detail-group > h3{
+    padding-left: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
     background-color:  #00135d;
@@ -73,3 +107,45 @@ form{
     text-transform: uppercase;
     border-radius: 0; 
 }
+
+@media (max-width: 600px){
+    .nav-bar{
+        height: 32.5px;
+    }
+
+    .heading > span{
+        text-align: center;
+        font-size: 20px;
+    }
+   
+    textarea, select,input[type = 'text'], input[type = 'email'], input[type = 'date'] ,input[type = 'file']{
+        padding: 6px;
+        margin-bottom: 2px;
+      }
+      
+    body{
+        font-family: 'Source Serif Pro', sans-serif;
+        font-size: 14px;
+    }
+
+    .wrapper{
+        padding:5px 15px;
+        max-width: 1280px;
+        min-width: 320px 
+    }
+
+    td{
+        width: 50%
+    }
+   
+    .heading > img{
+        vertical-align: middle;
+        height: 64px;
+        padding-top: 13px;
+        padding-left: 13px;
+    }
+
+    .material-icons.md-48{
+        font-size: 32px;
+    }
+}   
