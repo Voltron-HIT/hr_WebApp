@@ -14,7 +14,7 @@ s = URLSafeTimedSerializer('GOMOGOMONO...')
 
 salt = b'$2b$11$Za4hFNuzn3Rvw7gLnUVZCu'
 
-newpassword = ""
+newpassword = None
 dbEmail = ""
 
 #Unrouted functions
@@ -37,14 +37,15 @@ def index():
 @app.route('/resetPassword')
 def resetPassword():
     global newpassword
-    if newpassword != "":
+    
+    if newpassword != None:
        client = pymongo.MongoClient('mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo')
        db = client['mongo']
 
        #Hashing new password
        newpassword = (bcrypt.hashpw(newpassword.encode('utf-8'), salt)).decode('utf-8')
        db.Credentials.update_one({"_id":dbEmail}, {"$set":{"password":newpassword}})
-       newpassword = ""
+       newpassword = None
        return redirect(url_for('login'))
     return render_template('resetpassword.html')
 
