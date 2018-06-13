@@ -10,11 +10,11 @@
 </head>
 <body>
     <div class="wrapper">
-        <form action="/login">
+        <form action="{{url_for('login')}}" method="post">
             <center><img src="{{url_for('static', filename='img/hitlogo.png')}}" alt="" srcset="" height="120px" width="300px"></center>
             <h3> {{System_Name}} Log In </h3>
-            <input type="text" name="username" id="" required placeholder="Username">
-            <input type="password" name="password" id="" required placeholder="Password">
+            <input type="text" name="username" value="{{ request.form.username }}" id="" required placeholder="Username" autocomplete="off">
+            <input type="password" name="password" value="{{ request.form.password }}" id="" required placeholder="Password">
             <h4 class="error">{{Error_Message}}</h4>
             <button class="button" type="submit">Log In</button>
         </form>
