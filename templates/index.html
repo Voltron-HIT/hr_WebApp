@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Job Vacancies</title>
+	<title>Home</title>
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -10,8 +10,8 @@
 	<nav>
 		<div>
 			<ul>
-				<li><a href="{{url_for('index')}}"><b>HOME</b></a></li>
-				<li><a href="" type="button"><b>LOGIN</b></a></li>
+				<li><a href="{{url_for('home')}}"><b>HOME</b></a></li>
+				<li><a href="{{url_for('signIn')}}" type="button"><b>LOGIN</b></a></li>
 			</ul>
 		</div>
 	</nav>
@@ -51,7 +51,7 @@
 					</div>
 				</div>
 				<div class="apply-now">
-						<a href="">Apply Now</a>
+						<a href="{{url_for('applicationForm')}}">Apply Now</a>
 				</div>
 			</fieldset><br>
 			<fieldset class="expand">

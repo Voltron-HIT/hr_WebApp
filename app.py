@@ -32,7 +32,36 @@ def login_required(f):
 @app.route('/')
 def index():
 	'''opens login page'''
+	return render_template('index.html')
+
+@app.route('/signIn')
+def signIn():
+	'''opens login page'''
 	return render_template('login.html')
+
+@app.route('/home')
+def home():
+	return render_template('index.html')
+
+@app.route('/humanResourceHome')
+def humanResourceHome():
+	return render_template('hr.html')
+
+@app.route('/applicationForm')
+def applicationForm():
+	return render_template('applicationform.html')
+
+@app.route('/addVacancy')
+def addVacancy():
+	return render_template('addvacancy.html')
+
+@app.route('/adjudication')
+def adjudication():
+	return render_template('adjudication.html')
+
+@app.route('/shortlist')
+def shortlist():
+	return render_template('shortlist.html')
 
 @app.route('/resetPassword')
 def resetPassword():

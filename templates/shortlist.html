@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>Shortlist</title>
-	<link rel="stylesheet" type="text/css" media="print" href="{{ url_for('static', filename='style.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 	<header style="background: url(../static/img/hit-home-1.jpg) 100% no-repeat; background-size: cover;">
@@ -10,8 +10,8 @@
 	<nav>
 		<div>
 			<ul>
-				<li><a href="{{url_for('index')}}"><b>HOME</b></a></li>
-				<li><a href="" type="button"><b>ADD VACANCY</b></a></li>
+				<li><a href="{{url_for('humanResourceHome')}}"><b>HOME</b></a></li>
+				<li><a href="{{url_for('addVacancy')}}" type="button"><b>ADD VACANCY</b></a></li>
 			</ul>
 		</div>
 	</nav>
