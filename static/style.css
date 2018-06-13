@@ -50,7 +50,8 @@ header {
 	opacity: 0.5;
 	position: absolute;
 	min-height: 150px;
-	width: 100%;
+	max-width: 100%;
+	min-width: 360px;
 }
 .main-wrapper{
 	max-width: 100%;
