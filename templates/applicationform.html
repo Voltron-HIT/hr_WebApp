@@ -7,26 +7,34 @@
     <title>HIT Application</title>
     <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro" rel="stylesheet">
     <link rel="stylesheet" href="../static/applicationstyle.css">
-    <link rel="shortcut icon" href="..\static\favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="../static/favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-    <div class="heading">
-        <h1>H.I.T Job Application Form</h1>
+    <div class="nav-bar">
+        <span> <a href="{{url('index')}}"> <i class="material-icons md-48">arrow_back</i> </a> </span>
     </div>
+    <center class="heading">
+        <img src="../static/img/hitlogo1.png" alt="">
+        <span> Harare Institute Of Technology Job Application Form </span>
+    </center>
     <div class="wrapper">
         <form action="/asas">
             <div class="detail-group">
                 <h3>Personal Information</h3>
                 <div class="details">
                     <table>
-                        <tbody>
                             <tr>
-                                <td> <label for="firstname">Firstname: </label> </td>
-                                <td> <input type="text" required placeholder="John"> </td>
+                                <td class="label"> <label for="firstname">Firstname: </label> </td>
+                                <td class="input"> <input name="firstname" type="text" required placeholder="John"> </td>
                             </tr>
                             <tr>
                                 <td> <label for="surname">Surname: </label> </td>
-                                <td> <input type="text" required placeholder="Doe"> </td>
+                                <td> <input name="surname" type="text" required placeholder="Doe"> </td>
+                            </tr>
+                            <tr>
+                                <td> <label for="nationalid">National ID: </label> </td>
+                                <td> <input name="nationalid" type="text" required placeholder="22-345345X234-P"> </td>
                             </tr>
                             <tr>
                                 <td> <label for="DOB">Date Of Birth:</label> </td>
@@ -41,7 +49,6 @@
                                     </select>
                                 </td>
                             </tr>
-                        </tbody>
                     </table>        
                 </div>
             </div>
@@ -51,8 +58,8 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td> <label for="email">Email: </label> </td>
-                                    <td> <input type="email" required placeholder="John@gmail.com"> </td>
+                                    <td class="label"> <label for="email">Email: </label> </td>
+                                    <td class="input"> <input type="email" required placeholder="John@gmail.com"> </td>
                                 </tr>
                                 <tr>
                                     <td> <label for="phone1">Phone 1: </label> </td>

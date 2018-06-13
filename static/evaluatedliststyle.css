@@ -4,6 +4,7 @@ th.tableheading{
     background-color: #00135d;
     color: #ffb400;
     padding: 10px;
+    width: 300px;;
 
 }
 
@@ -11,6 +12,37 @@ td{
     padding: 10px;
 }
 
+.material-icons.md-24{
+    color: #ffb400;
+}
+
 tr:nth-child(even) {
     background-color: #f2f2f2;
+}
+
+.search{
+    width:100%;
+}
+
+.searchInput{
+    float: left;
+    border: 3px solid #00135d;
+    padding: 5px;
+    width: 90%;
+}
+
+.searchButton{
+    position: absolute;
+    border: 1px solid #00135d;
+    width: 5%;
+    background-color: #00135d;
+}
+
+.searchForm{
+    border: none;
+}
+
+.searchButton{
+    float: right;
+
 }
