@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Job Vacancies</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+	<header style="background: url(../static/img/hit-home-1.jpg) 100% no-repeat; background-size: cover;">
+	</header>
+	<nav>
+		<div>
+			<ul>
+				<li><a href="{{url_for('index')}}"><b>HOME</b></a></li>
+				<li><a href="{{url_for('login')}}" type="button"><b>LOGIN</b></a></li>
+			</ul>
+		</div>
+	</nav>
+	<div class="space"> </div>
+	<div class="main-wrapper">
+		<aside class="aside">
+			<ul>
+				<li>Fincance Department</li>
+				<li>Maintainance Department</li>	
+				<li>Catering Department</li>
+			</ul>
+		</aside>
+		<div class="main-container">
+		{% for _ in _ %}
+			<fieldset class="expand">
+				<span><img src="../static/img/finance icon.png"></span>
+				<div class="vacancy-details">
+					<h1>Post</h1>
+					<h3>{{Post}}</h3>
+					<label><h3>Description</h3></label>
+					<div class="description">
+						{{Description}}
+					</div>
+				</div>
+				<div class="apply-now">
+						<a href="{{url_for('applicationform')}}">Apply Now</a>
+				</div>
+			</fieldset><br>
+		{% endfor %}	
+			<fieldset class="expand">
+				<span><img src="../static/img/finance icon.png"></span>
+				<div class="vacancy-details">
+					<h1>Post</h1>
+					<label><h3>Description</h3></label>
+					<div class="description">
+						here is where the requirements will go
+					</div>
+				</div>
+				<div class="apply-now">
+						<a href="{{url_for('applicationform')}}">Apply Now</a>
+				</div>
+			</fieldset><br>
+			<fieldset class="expand">
+				<span><img src="../static/img/finance icon.png"></span>
+				<div class="vacancy-details">
+					<h1>Post</h1>
+					<label><h3>Description</h3></label>
+					<div class="description">
+						here is where the requirements will go
+					</div>
+				</div>
+				<div class="apply-now">
+						<a href="{{url_for('applicationform')}}">Apply Now</a>
+				</div>
+			</fieldset><br>
+			<fieldset class="expand">
+				<span><img src="../static/img/finance icon.png"></span>
+				<div class="vacancy-details">
+					<h1>Post</h1>
+					<label><h3>Description</h3></label>
+					<div class="description">
+						here is where the requirements will go
+					</div>
+				</div>
+				<div class="apply-now">
+						<a href="{{url_for('applicationform')}}">Apply Now</a>
+				</div>
+			</fieldset><br>
+		</div>
+	</div>		
+</body>
+</html>
