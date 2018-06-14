@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='admin_login.css') }}">
+</head>
+<body>
+<div class="wrap">
+	<fieldset class="login_fieldset">
+		<fieldset class="admin-login-icon"></fieldset>
+		<h2>Log in</h2>
+		<form method="post" action="#">
+			<div>
+				<input type="text" name="username" placeholder="Username">
+			</div><br>	
+			<div>
+				<input type="password" name="password" placeholder="Password">		
+			</div><br>
+			<div>
+				<button type="submit" name="admin_login" class="admin_login">Login</button>
+			</div><br>
+			<div>
+				<p>Forgot<a href="#">password</a></p>
+			</div>
+		</form>
+	</fieldset>
+</div>
+</body>
+</html>

@@ -14,6 +14,9 @@ s = URLSafeTimedSerializer('GOMOGOMONO...')
 
 salt = b'$2b$11$Za4hFNuzn3Rvw7gLnUVZCu'
 
+newpassword = None
+dbEmail = ""
+
 #Unrouted functions
 def login_required(f):
     @wraps(f)
@@ -29,43 +32,96 @@ def login_required(f):
 @app.route('/')
 def index():
 	'''opens login page'''
+	return render_template('index.html')
+
+@app.route('/signIn')
+def signIn():
+	'''opens login page'''
 	return render_template('login.html')
+
+@app.route('/home')
+def home():
+	return render_template('index.html')
+
+@app.route('/humanResourceHome')
+def humanResourceHome():
+	return render_template('hr.html')
+
+@app.route('/applicationForm')
+def applicationForm():
+	return render_template('applicationform.html')
+
+@app.route('/addVacancy')
+def addVacancy():
+	return render_template('addvacancy.html')
+
+@app.route('/adjudication')
+def adjudication():
+	return render_template('adjudication.html')
+
+@app.route('/shortlist')
+def shortlist():
+	return render_template('shortlist.html')
 
 @app.route('/resetPassword')
 def resetPassword():
-	'''opens resetpassword.html'''
-	return render_template('resetpassword.html')	
+    global newpassword
+    
+    if newpassword != None:
+       client = pymongo.MongoClient('mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo')
+       db = client['mongo']
+
+       #Hashing new password
+       newpassword = (bcrypt.hashpw(newpassword.encode('utf-8'), salt)).decode('utf-8')
+       db.Credentials.update_one({"_id":dbEmail}, {"$set":{"password":newpassword}})
+       newpassword = None
+       return redirect(url_for('login'))
+    return render_template('resetpassword.html')
 
 @app.route('/passwordRecovery', methods = ['GET','POST'])
 def passwordRecovery():
 	'''verifies the email adress and sent the password '''
 	email = ""
 	if request.method == 'POST':
-		email = request.form['email']	
+		email = request.form['email']
 	token = s.dumps(email, salt = 'emailRecovery')
-	return redirect(url_for('sending',token = token , _external = False))	
+	return redirect(url_for('sending',token = token , _external = False))
 
 @app.route('/sending/<token>')
 def sending(token):
-	''' this function sends a message to that email to get a new password, can use username which will be used to fetch the email address if it exists in the database '''
-	email = s.loads(token, salt = 'emailRecovery')
-	token = s.dumps(email, salt='emailToLink')
+    '''this function sends a message to that email to get a new password, can use username which will be used to fetch the email address if it exists in the database '''
 
-	link = url_for('forgotPassword', token = token , _external = True)	
-	msg = Message('Email Verification', sender='achidzix',recipients=[email])
-	msg.body = "User associated with the #@$ account has iniated a request to recover user password.\nTo complete password recover process, click the following link to enter new password \n{} \n\nFor your account protection, this link will expire after 24 hours.\n\nBest regards\nHIT\n\nhttps://www.hit.ac.zw/".format(link)
-	mail.send(msg)
-	return "Email has been sent to user emal address {}".format(email)
+    global dbEmail
+
+
+    email = s.loads(token, salt = 'emailRecovery')
+    token = s.dumps(email, salt='emailToLink')
+    dbEmail = email
+
+    link = url_for('forgotPassword', token = token , _external = True)
+    msg = Message('Email Verification', sender='achidzix',recipients=[email])
+    msg.body = "User associated with the #@$ account has iniated a request to recover user password.\nTo complete password recover process, click the following link to enter new password \n{} \n\nFor your account protection, this link will expire after 24 hours.\n\nBest regards\nHIT\n\nhttps://www.hit.ac.zw/".format(link)
+    mail.send(msg)
+    return "Email has been sent to user emal address {}".format(email)
 
 @app.route('/forgotPassword/<token>')
 def forgotPassword(token):
 	'''this runs from the link sent to the email address'''
 	try:
 		email = s.loads(token,salt='emailToLink', max_age = 3600)
-		
+
 	except SignatureExpired:
-		return "Link Timed Out"	
+		return "Link Timed Out"
 	return render_template('newpassword.html')
+
+@app.route('/newPasswordEntry', methods=('GET', 'POST'))
+def newPasswordEntry():
+
+    global newpassword
+    if request.method == 'POST':
+        newpassword = request.form.get('newpassword2')
+        return redirect(url_for('resetPassword'))
+    return render_template('newpassword.html')
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():
@@ -94,6 +150,10 @@ def logout():
     session.clear()
     return redirect(url_for('login'))
 
-if __name__ == "__main__":
-	app.run(debug=True)	
+#404 page
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
+if __name__ == "__main__":
+	app.run(debug=True)

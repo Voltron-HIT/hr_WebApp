@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Adjudication</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+	<header style="background: url(../static/img/hit-home-1.jpg) 100% no-repeat; background-size: cover;">
+	</header>
+	<nav>
+		<div>
+			<ul>
+				<li><a href="{{url_for('humanResourceHome')}}"><b>HOME</b></a></li>
+				<li><a href="{{url_for('addVacancy')}}" type="button"><b>ADD VACANCY</b></a></li>
+			</ul>
+		</div>
+	</nav>
+	<div class="space"> </div>
+	<div class="main-wrapper">
+		<table border="0" id="shortlist" class="table3000">
+			<tr>
+				<th class="first-col">Name</th>
+				<th>Post Applied For</th>
+				<th>Qualifications</th>
+				<th colspan="3" class="last-col">Scores</th>
+			</tr>
+			<tr>
+				<td colspan="3"></td>
+				<th>Knowledge</th>
+				<th>Fluency</th>
+				<th>Confidence</th>
+			</tr>
+			<tr>
+				<td>Anesu</td>
+				<td>Lecturer</td>
+				<td>5 'O' Levels, 3 'A' Levels</td>
+				<td><input type="text" name="knowledge-field"></td>
+				<td><input type="text" name="fluency-field"></td>
+				<td><input type="text" name="confidence-field"></td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+.edit-vacancy{
+	width: 120px;
+	float: right;
+	position: relative;
+}
+.edit-vacancy a{
+	text-decoration: none;
+	color: #00135d;	
+}
+.edit-vacancy a:hover{
+	color: #ffb400
+}
+ul {
+  list-style-type: none;
+}

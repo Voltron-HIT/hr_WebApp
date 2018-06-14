@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Shortlist</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+	<header style="background: url(../static/img/hit-home-1.jpg) 100% no-repeat; background-size: cover;">
+	</header>
+	<nav>
+		<div>
+			<ul>
+				<li><a href="{{url_for('humanResourceHome')}}"><b>HOME</b></a></li>
+				<li><a href="{{url_for('addVacancy')}}" type="button"><b>ADD VACANCY</b></a></li>
+			</ul>
+		</div>
+	</nav>
+	<div class="space"> </div>
+	<div class="container">
+	<br>
+	{% for _ in _ %}
+	<fieldset class="expand" id="expand">
+		<span><img src=""></span>
+		<div class="check">
+				<input type="checkbox"></input>
+		</div>
+		<div>
+			<h3>Name</h3>
+			<label>{{Name}}</label>
+			<label>Qualifications</label>
+			<div class="description">
+				<p>{{Qualifications}}</p>
+			</div>
+		</div>
+	</fieldset>
+	{% endfor %}
+	</div>
+	<div class="sidebar">
+		<h2>Shortlist</h2>
+		<table id="shortlist" class="table3000">
+			<tr>
+				<th class="first-col" colspan="2">Name</th>
+				<th class="last-col">Remove</th>
+			</tr>
+			{% for _ in _ %}
+			<tr>
+				<td colspan="2">Tapiwa Muza</td>
+				<td><button type="submit" class="remove">Remove</button></td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+</body>
+</html>
