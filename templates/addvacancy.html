@@ -53,8 +53,8 @@
                 </div>
                 <div class="detail-group">
                     <h3>Adjudicator Details</h3>
-                    <div class="details">
-                        <table>
+                    <div class="details" id="adjudicator">
+                        <table id='afield'>
                             <tr>
                                 <td> <label for="name">Name: </label> </td>
                                 <td> <input type="text" name="name" id="" placeholder="John Dube">  </td>
@@ -72,6 +72,8 @@
                                 <td> <input type="date" name="interviewdate" id=""> </td>
                             </tr>
                         </table>
+                        <span class="button" id="add" onclick="addAdjudicatorField()">Add Another</span>
+                        <span class="button" id="removeWorkExperienceField" onclick="removeWorkExperienceField()">Remove</span>
                     </div>
                     
                 </div>
@@ -79,6 +81,37 @@
         </form>
         
     </div>
-
 </body>
+
+<script>
+     // function to add dynamically add fields to adjudicators
+    function addAdjudicatorField(){
+        var button = document.getElementById('add')
+        var adjudicator = document.getElementById('adjudicator')
+        var fieldNumbers = adjudicator.childElementCount - 1;
+        var cloneElement = adjudicator.firstElementChild.cloneNode(true)
+        // return cloneElement.childNodes[1].childNodes[0].childNodes[3].childNodes[1]
+        cloneElement.id = "afield" + fieldNumbers
+        cloneElement.childNodes[1].childNodes[0].childNodes[3].childNodes[1].name = "name" + fieldNumbers
+        cloneElement.childNodes[1].childNodes[2].childNodes[3].childNodes[1].name = "adjudicatorpost" + fieldNumbers
+        cloneElement.childNodes[1].childNodes[4].childNodes[3].childNodes[1].name = "adjudicatordepartment" + fieldNumbers
+        cloneElement.childNodes[1].childNodes[6].childNodes[3].childNodes[1].name = "interviewdate" + fieldNumbers
+        adjudicator.insertBefore(cloneElement,button)
+    }
+
+    function removeAdjudicatorField(){
+        try{
+            var adjudicator = document.getElementById('adjudicator')
+            var fieldNumbers = adjudicator.childElementCount - 2
+            var childName = 'afield' + fieldNumbers
+            var child = document.getElementById(childName)
+            adjudicator.removeChild(child)
+        } catch(e){
+            alert('There Must Be At Least One Field')
+        }
+    }
+
+</script>
+
+
 </html>
