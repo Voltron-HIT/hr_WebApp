@@ -90,12 +90,16 @@
         var adjudicator = document.getElementById('adjudicator')
         var fieldNumbers = adjudicator.childElementCount - 1;
         var cloneElement = adjudicator.firstElementChild.cloneNode(true)
-        // return cloneElement.childNodes[1].childNodes[0].childNodes[3].childNodes[1]
+        var parent = cloneElement.childNodes[1]
+        var child = cloneElement.childNodes[1].childNodes[6]
+        parent.removeChild(child)
         cloneElement.id = "afield" + fieldNumbers
+        cloneElement.childNodes[1].childNodes[0].childNodes[3].childNodes[1].value = ""
+        cloneElement.childNodes[1].childNodes[2].childNodes[3].childNodes[1].value = ""
+        cloneElement.childNodes[1].childNodes[4].childNodes[3].childNodes[1].value = ""
         cloneElement.childNodes[1].childNodes[0].childNodes[3].childNodes[1].name = "name" + fieldNumbers
         cloneElement.childNodes[1].childNodes[2].childNodes[3].childNodes[1].name = "adjudicatorpost" + fieldNumbers
         cloneElement.childNodes[1].childNodes[4].childNodes[3].childNodes[1].name = "adjudicatordepartment" + fieldNumbers
-        cloneElement.childNodes[1].childNodes[6].childNodes[3].childNodes[1].name = "interviewdate" + fieldNumbers
         adjudicator.insertBefore(cloneElement,button)
     }
 
