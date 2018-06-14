@@ -80,7 +80,7 @@
             <div class="detail-group">
                     <h3>Academic Qualification</h3>
                     <div class="details" id="qualification">
-                            <div class="field">
+                            <div class="field" id="qfield">
                                 <label for="qualification">Qualification: </label>
                                 <input name="qualification" type="text" placeholder="5 O levels including English and Maths">
                                 <label for="awardingInstitute">Awarding Institute: </label>
@@ -89,12 +89,13 @@
                                 <input type="file" name="certificate" id="" required>                    
                             </div>
                             <span class="button" id="addqualification" onclick="addQualificationField()">Add Another</span>
+                            <span class="button" id="removequalification" onclick="removeQualificationField()">Remove</span>
                     </div>
             </div>
             <div class="detail-group">
                     <h3>Work Experience</h3>
                     <div class="details" id="workexperience">
-                            <div class="field">
+                            <div class="field" id="wfield">
                                 <label for="organisation">Organisation: </label>
                                 <input name="organisation" type="text" placeholder="Harare Institute Of Technology">
                                 <label for="position">Position: </label>
@@ -103,6 +104,7 @@
                                 <input name="time-frame" type="text" placeholder="2000-2002">
                             </div>
                             <span class="button" id="add" onclick="addWorkExperienceField()">Add Another</span>
+                            <span class="button" id="removeWorkExperienceField" onclick="removeWorkExperienceField()">Remove</span>
                     </div>
             </div>
 
@@ -119,6 +121,7 @@
         var workexperience = document.getElementById('workexperience')
         var fieldNumbers = workexperience.childElementCount - 1;
         var cloneElement = workexperience.firstElementChild.cloneNode(true)
+        cloneElement.id = "wfield" + fieldNumbers
         cloneElement.childNodes[3].name = "organisation" + fieldNumbers
         cloneElement.childNodes[7].name = "position" + fieldNumbers
         cloneElement.childNodes[11].name = "time-frame" + fieldNumbers
@@ -130,13 +133,39 @@
         var qualification = document.getElementById('qualification')
         var fieldNumbers = qualification.childElementCount - 1;
         var cloneElement = qualification.firstElementChild.cloneNode(true)
+        cloneElement.id = "qfield" + fieldNumbers
         cloneElement.childNodes[3].name = "qualification" + fieldNumbers
         cloneElement.childNodes[7].name = "awardingInstitute" + fieldNumbers
         cloneElement.childNodes[11].name = "certificate" + fieldNumbers
         qualification.insertBefore(cloneElement,button)
     }
+    // function to remove unwanted field from work exprerience
+    function removeWorkExperienceField(){
+        try{
+            var workexperience = document.getElementById('workexperience')
+            var fieldNumbers = workexperience.childElementCount - 2;
+            var childName = 'wfield' + fieldNumbers;
+            var parent = document.getElementById('workexperience')
+            var child = document.getElementById(childName)
+            parent.removeChild(child)
+        } catch(e){
+            alert('There Must be At least One Field')
+        }
+        
+    }
 
-
+    function removeQualificationField(){
+        try{
+            var qualification = document.getElementById('qualification')
+            var fieldNumbers = qualification.childElementCount - 2
+            var childName = 'qfield' + fieldNumbers
+            var child = document.getElementById(childName)
+            qualification.removeChild(child)
+        } catch(e){
+            alert('There Must Be At Least One Field')
+        }
+        
+    }
 
 
 </script>
