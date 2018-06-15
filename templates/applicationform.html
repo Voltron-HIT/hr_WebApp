@@ -82,9 +82,9 @@
                     <div class="details" id="qualification">
                             <div class="field" id="qfield">
                                 <label for="qualification">Qualification: </label>
-                                <input name="qualification" type="text" placeholder="5 O levels including English and Maths">
+                                <input class="qualification" name="qualification" type="text" placeholder="5 O levels including English and Maths">
                                 <label for="awardingInstitute">Awarding Institute: </label>
-                                <input name="awardingInstitute" type="text" placeholder="ZIMSEC">
+                                <input class="qualification" name="awardingInstitute" type="text" placeholder="ZIMSEC">
                                 <label for="certificate">Attach Certificate:</label>
                                 <input type="file" name="certificate" id="" required>                    
                             </div>
@@ -125,6 +125,7 @@
         var workexperience = document.getElementById('workexperience')
         var fieldNumbers = workexperience.childElementCount - 1;
         var cloneElement = workexperience.firstElementChild.cloneNode(true)
+        cloneElement.className = "field added"
         cloneElement.id = "wfield" + fieldNumbers
         cloneElement.childNodes[3].value = ""
         cloneElement.childNodes[7].value = ""
@@ -142,6 +143,7 @@
         var qualification = document.getElementById('qualification')
         var fieldNumbers = qualification.childElementCount - 1;
         var cloneElement = qualification.firstElementChild.cloneNode(true)
+        cloneElement.className = "field added"
         cloneElement.id = "qfield" + fieldNumbers
         cloneElement.childNodes[3].value = "" 
         cloneElement.childNodes[7].value = "" 
