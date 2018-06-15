@@ -36,17 +36,11 @@ def index():
 	'''opens login page'''
 	return render_template('index.html')
 
-@app.route('/signIn')
-def signIn():
-	'''opens login page'''
-	return render_template('login.html')
-
 @app.route('/home')
 def home():
 	return render_template('index.html')
 
 @app.route('/humanResourceHome')
-@login_required
 def humanResourceHome():
 	return render_template('hr.html')
 
@@ -202,24 +196,30 @@ def applicantList():
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():
-	'''user authentication '''
-	error_message = ""
-	client = pymongo.MongoClient('mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo')
-	db = client['mongo']
-	if request.method == 'POST':
-		username = request.form['username']
-		password = bcrypt.hashpw(request.form['password'].encode('utf-8'), salt)
+    error_message = ""
+    #MongoDB password retrieval
+    client = pymongo.MongoClient('mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo')
+    #accessing mongo database using dictionary style
+    db = client['mongo']
 
-		user = db.Credentials.find({'username': username})
-		for i in user:
-			dbUsername = i['username']
-			dbPassword = bytes(i['password'].encode('utf-8'))
+    if request.method == 'POST':
+        username = request.form['username']
+        password = bcrypt.hashpw(request.form['password'].encode('utf-8'), salt)
+        user = db.Credentials.find_one({'username': username})
 
-		if username != dbUsername or  bcrypt.hashpw(request.form['password'].encode('utf-8'), password) != dbPassword:
-			error = 'Invalid Credentials. Please try again.'
-		else:
-			return redirect(url_for('humanResourceHome'))
-	return render_template('login.html', Error_Message=error_message, System_Name="")
+        if user != None :
+            dbUsername = user['username']
+            dbPassword = bytes(user['password'].encode('utf-8'))
+
+            if username != dbUsername or bcrypt.hashpw(request.form['password'].encode('utf-8'), password) != dbPassword:
+                error_message = 'Invalid Credentials. Please try again.'
+            else:
+                return redirect(url_for('humanResourceHome'))
+        else:
+            error_message = 'Invalid Credentials. Please try again.'
+
+    return render_template('login.html', Error_Message=error_message, System_Name="")
+
 
 @app.route('/logout')
 @login_required
