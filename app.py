@@ -2,6 +2,8 @@ from flask import Flask, render_template, url_for, request, session, redirect
 from flask_mail import Mail,Message
 import pymongo
 import bcrypt
+import pandas as pd
+import collections
 from functools import wraps
 from itsdangerous import SignatureExpired, URLSafeTimedSerializer
 
@@ -66,7 +68,7 @@ def shortlist():
 @app.route('/resetPassword')
 def resetPassword():
     global newpassword
-    
+
     if newpassword != None:
        client = pymongo.MongoClient('mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo')
        db = client['mongo']
@@ -123,6 +125,45 @@ def newPasswordEntry():
         return redirect(url_for('resetPassword'))
     return render_template('newpassword.html')
 
+@app.route('/applicantList')
+def applicantList():
+
+    client = pymongo.MongoClient("mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo")
+    db = client['mongo']
+    user = db.applicants.find()
+    data = []
+    keys = []
+    values = []
+
+    for i in user:
+        keys = list(i.keys())
+        values = list(i.values())
+        #print(help(list.reverse))
+        dictionary = dict(zip(values, keys))
+
+        data.append(collections.OrderedDict(map(reversed, dictionary.items())))
+
+    df = pd.DataFrame(data)
+
+
+    fullList = df.to_html()
+
+    path = 'templates/applicantList/list.html'
+    file = 'applicantList/list.html'
+
+    with open(path, 'w') as myfile:
+        myfile.write('''{% extends "evaluatedlist.html" %}
+                        {% block title %} Full Applicant List {% endblock %}
+                        {% block content %}
+                        {% block heading %} SUMMARY TABLES {% endblock %}
+                        ''')
+
+    with open(path, 'a') as myfile:
+        myfile.write(fullList)
+        myfile.write('{% endblock %}')
+
+    return render_template(file)
+
 @app.route('/login', methods=('GET', 'POST'))
 def login():
 	'''user authentication '''
@@ -141,7 +182,7 @@ def login():
 		if username != dbUsername or  bcrypt.hashpw(request.form['password'].encode('utf-8'), password) != dbPassword:
 			error = 'Invalid Credentials. Please try again.'
 		else:
-			return "Successfully Logged In"
+			return redirect(url_for('humanResourceHome'))
 	return render_template('login.html', Error_Message=error_message, System_Name="")
 
 @app.route('/logout')

@@ -9,15 +9,17 @@
     <link rel="stylesheet" href="../static/evaluatedliststyle.css">
     <link rel="shortcut icon" href="..\static\favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <title>Evaluated List</title>
+    <title>{% block title %}Evaluated List {% endblock %}</title>
 </head>
+{% block content %}
 <body>
     <div class="heading">
         <span> <a href="{{url_for('index')}}"> <i class="material-icons md-48">arrow_back</i> </a> </span>
-        <h1> <img src="../static/favicon.ico" alt=""> Evaluated List</h1>
+
+       <h1> <img src="../static/favicon.ico" alt="">{% block heading %}  Evaluated List {% endblock %} </h1>
     </div>
     <div class="wrapper" id="list">
-        
+
         <!-- <form class="searchForm" action="searchEvaluatedList">
             <div class="search" >
                 <input class="searchInput" type="text" name="" id="">
@@ -25,7 +27,7 @@
             </div>
         </form> -->
         <!-- seach tool bar if neeeded  -->
-       
+
         <table style="width: 100%">
             <tbody>
                 <tr>
@@ -47,11 +49,12 @@
                         <td>Blessed Tawanda Mahuni </td>
                         <td> Chief Technology Officer </td>
                         <td> 10.0 </td>
-                    </tr>            
+                    </tr>
             </tbody>
         </table>
     </div>
 </body>
+
 
 <script>
     function print(){
@@ -64,6 +67,7 @@
         WinPrint.close();
     }
 </script>
+{% endblock %}
 
 
 </html>

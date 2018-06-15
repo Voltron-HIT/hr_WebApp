@@ -1,0 +1,36 @@
+{% extends "evaluatedlist.html" %}
+                        {% block title %} Full Applicant List {% endblock %}
+                        {% block content %}
+                        {% block heading %} SUMMARY TABLES {% endblock %}
+                        <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>_id</th>
+      <th>name</th>
+      <th>contact details</th>
+      <th>sex</th>
+      <th>age</th>
+      <th>academic qualifications</th>
+      <th>awarding institution</th>
+      <th>work experience</th>
+      <th>comment</th>
+      <th>salary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>Gumisai Solomon Njanike</td>
+      <td>House No.2282 Egypt, Highfield, Harare gumisai...</td>
+      <td>M</td>
+      <td>49</td>
+      <td>1. 5 O' Level passes including  English and Ma...</td>
+      <td>Cambridge</td>
+      <td>Sales Representative - Liquid Control Corporat...</td>
+      <td>documents attached</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>{% endblock %}
