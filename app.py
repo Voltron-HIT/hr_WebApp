@@ -143,13 +143,15 @@ def capture():
             d.append(int(i))
 
         age = int((date(c[0], c[1], c[2]) - date(d[0], d[1], d[2])).days / 365)
+        file = request.files.get('certificate')
+        bFile = file.read()
+        bitFile = bytes(bFile)
 
         db.applicants.insert({'name' : request.form['firstname'] + ' ' + request.form['surname'], 'contact details': request.form['address'] + ' ' + request.form['mail'] + ' ' + request.form['phone1'] + ' '
          + request.form['phone2'],
-        'sex':request.form['sex'], 'age': age, 'academic qualifications': request.form['qualification'] ,'awarding institute':request.form['awardingInstitute']
+        'sex':request.form['sex'], 'age': age, 'academic qualifications': request.form['qualification'] ,'awarding institute':request.form['awardingInstitute'],'certificate': Binary(bitFile)
         ,'work experience':'Worked at ' + request.form['organisation'] + ' ' + 'was the  ' + request.form['position'] +' from '+request.form['timeframe'], 'comments': ' no comment', 'salary': ' '})
 
-        return 'Thank You'
 
     return render_template('applicationform.html')
 
