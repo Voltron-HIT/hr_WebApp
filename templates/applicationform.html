@@ -19,101 +19,99 @@
         <span> Harare Institute Of Technology Job Application Form </span>
     </center>
     <div class="wrapper">
-        <form action="/asas">
-            <div class="detail-group">
-                <h3>Personal Information</h3>
-                <div class="details">
-                    <table>
-                            <tr>
-                                <td class="label"> <label for="firstname">Firstname: </label> </td>
-                                <td class="input"> <input name="firstname" type="text" required placeholder="John"> </td>
-                            </tr>
-                            <tr>
-                                <td> <label for="surname">Surname: </label> </td>
-                                <td> <input name="surname" type="text" required placeholder="Doe"> </td>
-                            </tr>
-                            <tr>
-                                <td> <label for="nationalid">National ID: </label> </td>
-                                <td> <input name="nationalid" type="text" required placeholder="22-345345X234-P"> </td>
-                            </tr>
-                            <tr>
-                                <td> <label for="DOB">Date Of Birth:</label> </td>
-                                <td> <input name="DOB" type="date" required> </td>
-                            </tr>
-                            <tr>
-                                <td>  <label for="Sex">Sex:</label> </td>
-                                <td>
-                                    <select name="Sex" id="">
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                    </select>
-                                </td>
-                            </tr>
-                    </table>        
-                </div>
-            </div>
-            <div class="detail-group">
-                    <h3>Contact Information</h3>
-                    <div class="details">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td class="label"> <label for="email">Email: </label> </td>
-                                    <td class="input"> <input type="email" required placeholder="John@gmail.com"> </td>
-                                </tr>
-                                <tr>
-                                    <td> <label for="phone1">Phone 1: </label> </td>
-                                    <td>  <input type="text" name="phone1" required placeholder="0772334661"> </td>
-                                </tr>
-                                <tr>
-                                    <td> <label for="phone2">Phone 2: </label> </td>
-                                    <td> <input type="text" name="phone2" placeholder="0772334661"> </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: top"> <label for="address">Address:</label> </td> 
-                                    <td> <textarea name="address" id="" cols="30" rows="6"></textarea> </td>           
-                                </tr>
-                            </tbody>
-                        </table>   
-                    </div>
-            </div>
-            <div class="detail-group">
-                    <h3>Academic Qualification</h3>
-                    <div class="details" id="qualification">
-                            <div class="field" id="qfield">
-                                <label for="qualification">Qualification: </label>
-                                <input class="qualification" name="qualification" type="text" placeholder="5 O levels including English and Maths">
-                                <label for="awardingInstitute">Awarding Institute: </label>
-                                <input class="qualification" name="awardingInstitute" type="text" placeholder="ZIMSEC">
-                                <label for="certificate">Attach Certificate:</label>
-                                <input type="file" name="certificate" id="" required>                    
-                            </div>
-                            <input type="text" name="numberOfQualifications" id="numberOfQualifications" value="1" style="display:none">
-                            <span class="button" id="addqualification" onclick="addQualificationField()">Add Another</span>
-                            <span class="button" id="removequalification" onclick="removeQualificationField()">Remove</span>
-                    </div>
-            </div>
-            <div class="detail-group">
-                    <h3>Work Experience</h3>
-                    <div class="details" id="workexperience">
-                            <div class="field" id="wfield">
-                                <label for="organisation">Organisation: </label>
-                                <input name="organisation" type="text" placeholder="Harare Institute Of Technology">
-                                <label for="position">Position: </label>
-                                <input name="position" type="text" placeholder="Receptionist">
-                                <label for="time-frame">Time Frame: </label>
-                                <input name="time-frame" type="text" placeholder="2000-2002">
-                            </div>
-                            <input type="text" name="numberOfWorkExperiences" id="numberOfExperiences" value="1" style="display:none">
-                            <span class="button" id="add" onclick="addWorkExperienceField()">Add Another</span>
-                            <span class="button" id="removeWorkExperienceField" onclick="removeWorkExperienceField()">Remove</span>
-                    </div>
-            </div>
+        <form action="{{url_for('capture')}}" method=POST>
+          <div class="detail-group">
+             <h3>Personal Information</h3>
+             <div class="details">
+                 <table>
+                         <tr>
+                             <td class="label"> <label for="firstname">Firstname: </label> </td>
+                             <td class="input"> <input name="firstname" value="{{ request.form.firstname }}" type="text" required placeholder="John"> </td>
+                         </tr>
+                         <tr>
+                             <td> <label for="surname">Surname: </label> </td>
+                             <td> <input name="surname"  value="{{ request.form.surname }}" type="text" required placeholder="Doe"> </td>
+                         </tr>
+                         <tr>
+                             <td> <label for="nationalid">National ID: </label> </td>
+                             <td> <input name="nationalid" type="text" value="{{ request.form.nationalid }}" required placeholder="22-345345X234-P"> </td>
+                         </tr>
+                         <tr>
+                             <td> <label for="DOB">Date Of Birth:</label> </td>
+                             <td> <input name="DOB" value="{{ request.form.DOB }}" type="date" required> </td>
+                         </tr>
+                         <tr>
+                             <td>  <label for="Sex">Sex:</label> </td>
+                             <td>
+                                 <select name="sex" value="{{ request.form.sex }}"  id="">
+                                     <option value="Male">Male</option>
+                                     <option value="Female">Female</option>
+                                 </select>
+                             </td>
+                         </tr>
+                 </table>
+             </div>
+         </div>
+         <div class="detail-group">
+                 <h3>Contact Information</h3>
+                 <div class="details">
+                     <table>
+                         <tbody>
+                             <tr>
+                                 <td class="label"> <label for="email">Email: </label> </td>
+                                 <td class="input"> <input type="email" name="mail" value="{{ request.form.mail}}"required placeholder="John@gmail.com"> </td>
+                             </tr>
+                             <tr>
+                                 <td> <label for="phone1">Phone 1: </label> </td>
+                                 <td>  <input type="text" name="phone1" value="{{ request.form.phone1}}" required placeholder="0772334661"> </td>
+                             </tr>
+                             <tr>
+                                 <td> <label for="phone2">Phone 2: </label> </td>
+                                 <td> <input type="text" name="phone2" value="{{ request.form.phone2}}" placeholder="0772334661"> </td>
+                             </tr>
+                             <tr>
+                                 <td style="vertical-align: top"> <label for="address">Address:</label> </td>
+                                 <td> <textarea name="address" value="{{ request.form.address }}" id="" cols="30" rows="6"></textarea> </td>
+                             </tr>
+                         </tbody>
+                     </table>
+                 </div>
+         </div>
+         <div class="detail-group">
+                 <h3>Academic Qualification</h3>
+                 <div class="details" id="qualification">
+                         <div class="field" id="qfield">
+                             <label for="qualification">Qualification: </label>
+                             <input name="qualification" type="text" value="{{ request.form.qualification }}" placeholder="5 O levels including English and Maths">
+                             <label for="awardingInstitute">Awarding Institute: </label>
+                             <input name="awardingInstitute"  value="{{ request.form.awardingInstitute }}" type="text" placeholder="ZIMSEC">
+                             <label for="certificate">Attach Certificate:</label>
+                             <input type="file" name="certificate" value="{{ request.form.certificate }}" id="" required>
+                         </div>
+                         <span class="button" id="addqualification" onclick="addQualificationField()">Add Another</span>
+                         <span class="button" id="removequalification" onclick="removeQualificationField()">Remove</span>
+                 </div>
+         </div>
+         <div class="detail-group">
+                 <h3>Work Experience</h3>
+                 <div class="details" id="workexperience">
+                         <div class="field" id="wfield">
+                             <label for="organisation">Organisation: </label>
+                             <input name="organisation" type="text" value="{{ request.form.organisation}}" placeholder="Harare Institute Of Technology">
+                             <label for="position">Position: </label>
+                             <input name="position" type="text" value="{{ request.form.position }}"  placeholder="Receptionist">
+                             <label for="time-frame">Time Frame: </label>
+                             <input name="timeframe" type="text"  value="{{ request.form.timeframe }}" placeholder="2000-2002">
+                         </div>
+                         <span class="button" id="add" onclick="addWorkExperienceField()">Add Another</span>
+                         <span class="button" id="removeWorkExperienceField" onclick="removeWorkExperienceField()">Remove</span>
+                 </div>
+         </div>
 
-            <button class="button submit-button" type="submit">Apply</button>
+         <button class="button submit-button" type="submit">Apply</button>
 
-        </form>
-    </div>
+     </form>
+ </div>
 </body>
 
 <script>
@@ -145,8 +143,8 @@
         var cloneElement = qualification.firstElementChild.cloneNode(true)
         cloneElement.className = "field added"
         cloneElement.id = "qfield" + fieldNumbers
-        cloneElement.childNodes[3].value = "" 
-        cloneElement.childNodes[7].value = "" 
+        cloneElement.childNodes[3].value = ""
+        cloneElement.childNodes[7].value = ""
         cloneElement.childNodes[11].value = ""
         cloneElement.childNodes[3].name = "qualification" + fieldNumbers
         cloneElement.childNodes[7].name = "awardingInstitute" + fieldNumbers
@@ -167,7 +165,7 @@
         } catch(e){
             alert('There Must be At least One Field')
         }
-        
+
     }
 
     function removeQualificationField(){
@@ -182,7 +180,7 @@
         } catch(e){
             alert('There Must Be At Least One Field')
         }
-        
+
     }
 
 

@@ -2,7 +2,10 @@ from flask import Flask, render_template, url_for, request, session, redirect
 from flask_mail import Mail,Message
 import pymongo
 import bcrypt
+import pandas as pd
+import collections
 from functools import wraps
+from datetime import date
 from itsdangerous import SignatureExpired, URLSafeTimedSerializer
 
 app = Flask(__name__)
@@ -24,7 +27,6 @@ def login_required(f):
         if 'logged_in' in session:
             return f(*args, **kwargs)
         else:
-            flash("Requires login")
             return redirect(url_for('login'))
 
     return wrap
@@ -33,11 +35,6 @@ def login_required(f):
 def index():
 	'''opens login page'''
 	return render_template('index.html')
-
-@app.route('/signIn')
-def signIn():
-	'''opens login page'''
-	return render_template('login.html')
 
 @app.route('/home')
 def home():
@@ -66,7 +63,7 @@ def shortlist():
 @app.route('/resetPassword')
 def resetPassword():
     global newpassword
-    
+
     if newpassword != None:
        client = pymongo.MongoClient('mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo')
        db = client['mongo']
@@ -123,32 +120,114 @@ def newPasswordEntry():
         return redirect(url_for('resetPassword'))
     return render_template('newpassword.html')
 
+
+@app.route('/capture', methods=['POST', 'GET'])
+def capture():
+
+    client = pymongo.MongoClient('mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo')
+    db = client['mongo']
+    if request.method == 'POST':
+        current = date.today()
+        dateOfBirth = request.form['DOB']
+
+        cd = current.strftime('%Y, %m, %d')
+
+        currentDate = cd.split(",")
+        dob = dateOfBirth.split("-")
+
+        c = []
+        d = []
+        for i in currentDate:
+            c.append(int(i))
+        for i in dob:
+            d.append(int(i))
+
+        age = int((date(c[0], c[1], c[2]) - date(d[0], d[1], d[2])).days / 365)
+
+        db.applicants.insert({'name' : request.form['firstname'] + ' ' + request.form['surname'], 'contact details': request.form['address'] + ' ' + request.form['mail'] + ' ' + request.form['phone1'] + ' '
+         + request.form['phone2'],
+        'sex':request.form['sex'], 'age': age, 'academic qualifications': request.form['qualification'] ,'awarding institute':request.form['awardingInstitute']
+        ,'work experience':'Worked at ' + request.form['organisation'] + ' ' + 'was the  ' + request.form['position'] +' from '+request.form['timeframe'], 'comments': ' no comment', 'salary': ' '})
+
+        return 'Thank You'
+
+    return render_template('applicationform.html')
+
+
+
+@app.route('/applicantList')
+def applicantList():
+
+    client = pymongo.MongoClient("mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo")
+    db = client['mongo']
+    user = db.applicants.find()
+    data = []
+    keys = []
+    values = []
+
+    for i in user:
+        keys = list(i.keys())
+        values = list(i.values())
+        #print(help(list.reverse))
+        dictionary = dict(zip(values, keys))
+
+        data.append(collections.OrderedDict(map(reversed, dictionary.items())))
+
+    df = pd.DataFrame(data)
+
+
+    fullList = df.to_html()
+
+    path = 'templates/applicantList/list.html'
+    file = 'applicantList/list.html'
+
+    with open(path, 'w') as myfile:
+        myfile.write('''{% extends "evaluatedlist.html" %}
+                        {% block title %} Full Applicant List {% endblock %}
+                        {% block content %}
+                        {% block heading %} SUMMARY TABLES {% endblock %}
+                        ''')
+
+    with open(path, 'a') as myfile:
+        myfile.write(fullList)
+        myfile.write('{% endblock %}')
+
+    return render_template(file)
+
 @app.route('/login', methods=('GET', 'POST'))
 def login():
-	'''user authentication '''
-	error_message = ""
-	client = pymongo.MongoClient('mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo')
-	db = client['mongo']
-	if request.method == 'POST':
-		username = request.form['username']
-		password = bcrypt.hashpw(request.form['password'].encode('utf-8'), salt)
+    error_message = ""
+    #MongoDB password retrieval
+    client = pymongo.MongoClient('mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo')
+    #accessing mongo database using dictionary style
+    db = client['mongo']
 
-		user = db.Credentials.find({'username': username})
-		for i in user:
-			dbUsername = i['username']
-			dbPassword = bytes(i['password'].encode('utf-8'))
+    if request.method == 'POST':
+        username = request.form['username']
+        password = bcrypt.hashpw(request.form['password'].encode('utf-8'), salt)
+        user = db.Credentials.find_one({'username': username})
 
-		if username != dbUsername or  bcrypt.hashpw(request.form['password'].encode('utf-8'), password) != dbPassword:
-			error = 'Invalid Credentials. Please try again.'
-		else:
-			return "Successfully Logged In"
-	return render_template('login.html', Error_Message=error_message, System_Name="")
+        if user != None :
+            dbUsername = user['username']
+            dbPassword = bytes(user['password'].encode('utf-8'))
+
+            if username != dbUsername or bcrypt.hashpw(request.form['password'].encode('utf-8'), password) != dbPassword:
+                error_message = 'Invalid Credentials. Please try again.'
+            else:
+                return redirect(url_for('humanResourceHome'))
+        else:
+            error_message = 'Invalid Credentials. Please try again.'
+
+    return render_template('login.html', Error_Message=error_message, System_Name="")
+
 
 @app.route('/logout')
 @login_required
 def logout():
     session.clear()
     return redirect(url_for('login'))
+
+
 
 #404 page
 @app.errorhandler(404)
