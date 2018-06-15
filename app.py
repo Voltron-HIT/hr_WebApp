@@ -5,6 +5,7 @@ import bcrypt
 import pandas as pd
 import collections
 from functools import wraps
+from datetime import date
 from itsdangerous import SignatureExpired, URLSafeTimedSerializer
 
 app = Flask(__name__)
@@ -26,7 +27,6 @@ def login_required(f):
         if 'logged_in' in session:
             return f(*args, **kwargs)
         else:
-            flash("Requires login")
             return redirect(url_for('login'))
 
     return wrap
@@ -46,6 +46,7 @@ def home():
 	return render_template('index.html')
 
 @app.route('/humanResourceHome')
+@login_required
 def humanResourceHome():
 	return render_template('hr.html')
 
@@ -125,6 +126,41 @@ def newPasswordEntry():
         return redirect(url_for('resetPassword'))
     return render_template('newpassword.html')
 
+
+@app.route('/capture', methods=['POST', 'GET'])
+def capture():
+
+    client = pymongo.MongoClient('mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo')
+    db = client['mongo']
+    if request.method == 'POST':
+        current = date.today()
+        dateOfBirth = request.form['DOB']
+
+        cd = current.strftime('%Y, %m, %d')
+
+        currentDate = cd.split(",")
+        dob = dateOfBirth.split("-")
+
+        c = []
+        d = []
+        for i in currentDate:
+            c.append(int(i))
+        for i in dob:
+            d.append(int(i))
+
+        age = int((date(c[0], c[1], c[2]) - date(d[0], d[1], d[2])).days / 365)
+
+        db.applicants.insert({'name' : request.form['firstname'] + ' ' + request.form['surname'], 'contact details': request.form['address'] + ' ' + request.form['mail'] + ' ' + request.form['phone1'] + ' '
+         + request.form['phone2'],
+        'sex':request.form['sex'], 'age': age, 'academic qualifications': request.form['qualification'] ,'awarding institute':request.form['awardingInstitute']
+        ,'work experience':'Worked at ' + request.form['organisation'] + ' ' + 'was the  ' + request.form['position'] +' from '+request.form['timeframe'], 'comments': ' no comment', 'salary': ' '})
+
+        return 'Thank You'
+
+    return render_template('applicationform.html')
+
+
+
 @app.route('/applicantList')
 def applicantList():
 
@@ -190,6 +226,8 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for('login'))
+
+
 
 #404 page
 @app.errorhandler(404)
