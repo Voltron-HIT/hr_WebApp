@@ -160,35 +160,36 @@ def applicantList():
 
     client = pymongo.MongoClient("mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo")
     db = client['mongo']
-    user = db.applicants.find()
+    user = db.applicants.find({})
     data = []
     keys = []
     values = []
+    
+    
 
     for i in user:
         keys = list(i.keys())
         values = list(i.values())
-        #print(help(list.reverse))
         dictionary = dict(zip(values, keys))
 
         data.append(collections.OrderedDict(map(reversed, dictionary.items())))
-
+    
     df = pd.DataFrame(data)
+    df = df.drop(["_id"], axis=1)
+
 
 
     fullList = df.to_html()
 
-    path = 'templates/applicantList/list.html'
-    file = 'applicantList/list.html'
+    path = 'templates/applicantList/applicantlist.html'
+    file = 'applicantList/applicantlist.html'
 
     with open(path, 'w') as myfile:
-        myfile.write('''{% extends "evaluatedlist.html" %}
+        myfile.write('''{% extends "list.html" %}
                         {% block title %} Full Applicant List {% endblock %}
+                        {% block heading %} Applicant List {% endblock %}
                         {% block content %}
-                        {% block heading %} SUMMARY TABLES {% endblock %}
                         ''')
-
-    with open(path, 'a') as myfile:
         myfile.write(fullList)
         myfile.write('{% endblock %}')
 

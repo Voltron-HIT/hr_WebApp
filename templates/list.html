@@ -11,23 +11,18 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>{% block title %}Evaluated List {% endblock %}</title>
 </head>
-{% block content %}
-<body>
-    <div class="heading">
-        <span> <a href="{{url_for('index')}}"> <i class="material-icons md-48">arrow_back</i> </a> </span>
 
-       <h1> <img src="../static/favicon.ico" alt="">{% block heading %}  Evaluated List {% endblock %} </h1>
+<body>
+    <div class="nav-bar">
+        <span> <a href="{{url_for('humanResourceHome')}}"> <i class="material-icons md-48">arrow_back</i> </a> </span>
+    </div>
+    <div class="heading">
+        <img src="../static/img/hitlogo1.png" alt="">
+        <span> {% block heading %}  Evaluated List {% endblock %} </span>
     </div>
     <div class="wrapper" id="list">
-
-        <!-- <form class="searchForm" action="searchEvaluatedList">
-            <div class="search" >
-                <input class="searchInput" type="text" name="" id="">
-                <button class="searchButton" type="submit" > <i class="material-icons md-24">search</i> </button>
-            </div>
-        </form> -->
-        <!-- seach tool bar if neeeded  -->
-
+        {% block content %}
+        
         <table style="width: 100%">
             <tbody>
                 <tr>
@@ -52,11 +47,18 @@
                     </tr>
             </tbody>
         </table>
+
+        {% endblock %}
     </div>
 </body>
 
 
 <script>
+
+    list = document.getElementsByTagName('table')
+    list[0].removeAttribute('border')
+
+
     function print(){
         var prtContent = document.getElementById("list");
         var WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
@@ -67,7 +69,7 @@
         WinPrint.close();
     }
 </script>
-{% endblock %}
+
 
 
 </html>

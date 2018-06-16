@@ -97,12 +97,13 @@
                  <div class="details" id="workexperience">
                          <div class="field" id="wfield">
                              <label for="organisation">Organisation: </label>
-                             <input name="organisation" type="text" value="{{ request.form.organisation}}" placeholder="Harare Institute Of Technology">
+                             <input name="organisation" id="organisation1" type="text"  placeholder="Harare Institute Of Technology">
                              <label for="position">Position: </label>
-                             <input name="position" type="text" value="{{ request.form.position }}"  placeholder="Receptionist">
+                             <input name="position" id="position1" type="text"  placeholder="Receptionist">
                              <label for="time-frame">Time Frame: </label>
-                             <input name="timeframe" type="text"  value="{{ request.form.timeframe }}" placeholder="2000-2002">
+                             <input name="timeframe" id="timeframe1" type="text"   placeholder="2000-2002">
                          </div>
+                         <textarea style = "display:none" name="workexperience" id="workexperiences" cols="30" rows="10"></textarea>
                          <span class="button" id="add" onclick="addWorkExperienceField()">Add Another</span>
                          <span class="button" id="removeWorkExperienceField" onclick="removeWorkExperienceField()">Remove</span>
                  </div>
@@ -117,26 +118,27 @@
 <script>
     // function to add dynamically add fields to work experience
     function addWorkExperienceField(){
-        var numberOfExperiences = document.getElementById('numberOfExperiences')
-        numberOfExperiences.value = Number(numberOfExperiences.value) + 1
         var button = document.getElementById('add')
         var workexperience = document.getElementById('workexperience')
-        var fieldNumbers = workexperience.childElementCount - 1;
+        var fieldNumbers = workexperience.childElementCount - 3;
+        textarea = document.getElementById('workexperiences')
+        textarea.value = textarea.value + " \n " + document.getElementById('organisation' + fieldNumbers).value + ", " + document.getElementById('position' + fieldNumbers).value + ", " + document.getElementById('timeframe' + fieldNumbers).value
+        fieldNumbers += 1
         var cloneElement = workexperience.firstElementChild.cloneNode(true)
         cloneElement.className = "field added"
         cloneElement.id = "wfield" + fieldNumbers
         cloneElement.childNodes[3].value = ""
         cloneElement.childNodes[7].value = ""
         cloneElement.childNodes[11].value = ""
-        cloneElement.childNodes[3].name = "organisation" + fieldNumbers
-        cloneElement.childNodes[7].name = "position" + fieldNumbers
-        cloneElement.childNodes[11].name = "time-frame" + fieldNumbers
+        cloneElement.childNodes[3].id = "organisation" + fieldNumbers
+        cloneElement.childNodes[7].id = "position" + fieldNumbers
+        cloneElement.childNodes[11].id = "timeframe" + fieldNumbers
+        
         workexperience.insertBefore(cloneElement,button)
+
     }
     // function to add dynamically add fields to qualifications
     function addQualificationField(){
-        var numberOfQualifications = document.getElementById('numberOfQualifications')
-        numberOfQualifications.value = Number(numberOfQualifications.value) + 1
         var button = document.getElementById('addqualification')
         var qualification = document.getElementById('qualification')
         var fieldNumbers = qualification.childElementCount - 1;
@@ -154,10 +156,8 @@
     // function to remove unwanted field from work exprerience
     function removeWorkExperienceField(){
         try{
-            var numberOfExperiences = document.getElementById('numberOfExperiences')
-            numberOfExperiences.value = Number(numberOfExperiences.value) - 1
             var workexperience = document.getElementById('workexperience')
-            var fieldNumbers = workexperience.childElementCount - 2;
+            var fieldNumbers = workexperience.childElementCount - 3;
             var childName = 'wfield' + fieldNumbers;
             var parent = document.getElementById('workexperience')
             var child = document.getElementById(childName)
@@ -170,10 +170,8 @@
 
     function removeQualificationField(){
         try{
-            var numberOfQualifications = document.getElementById('numberOfQualifications')
-            numberOfQualifications.value = Number(numberOfQualifications.value) - 1
             var qualification = document.getElementById('qualification')
-            var fieldNumbers = qualification.childElementCount - 2
+            var fieldNumbers = qualification.childElementCount - 3
             var childName = 'qfield' + fieldNumbers
             var child = document.getElementById(childName)
             qualification.removeChild(child)
