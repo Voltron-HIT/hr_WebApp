@@ -4,8 +4,9 @@ import pymongo
 import bcrypt
 import pandas as pd
 import collections
+import re
 from functools import wraps
-from datetime import date
+from datetime import datetime
 from itsdangerous import SignatureExpired, URLSafeTimedSerializer
 
 app = Flask(__name__)
@@ -31,14 +32,37 @@ def login_required(f):
 
     return wrap
 
-@app.route('/')
-def index():
-	'''opens login page'''
-	return render_template('index.html')
 
+@app.route('/')
 @app.route('/home')
 def home():
-	return render_template('index.html')
+
+    position = ""
+    deadline = None
+    status = None
+    minimum_requirements = []
+    responsibilities = []
+
+    client = pymongo.MongoClient("mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo")
+    db = client['mongo']
+
+    post = db.Vacancies.find()
+
+    for i in post:
+        position = i['post']
+        minimum_requirements = i['minimum requirements']
+        responsibilities = i['responsibilities']
+        deadline = i['deadline']
+
+        current = datetime.now()
+
+        if current < deadline:
+            status = "Active Vacancy"
+        else:
+            status = "Expired Vacancy"
+
+    return render_template('index.html', minimum_requirements=minimum_requirements, responsibilities=responsibilities, position=position, status=status, deadline=deadline)
+
 
 @app.route('/humanResourceHome')
 def humanResourceHome():
@@ -177,6 +201,9 @@ def applicantList():
 
 
     fullList = df.to_html()
+    pattern = r'"dataframe"'
+    fullList = re.sub(pattern, "dataframe ", fullList)
+
 
     path = 'templates/applicantList/list.html'
     file = 'applicantList/list.html'
@@ -187,8 +214,6 @@ def applicantList():
                         {% block content %}
                         {% block heading %} SUMMARY TABLES {% endblock %}
                         ''')
-
-    with open(path, 'a') as myfile:
         myfile.write(fullList)
         myfile.write('{% endblock %}')
 
@@ -226,8 +251,6 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for('login'))
-
-
 
 #404 page
 @app.errorhandler(404)
