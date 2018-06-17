@@ -19,31 +19,31 @@
         <span> Harare Institute Of Technology Job Application Form </span>
     </center>
     <div class="wrapper">
-        <form action="{{url_for('capture')}}" method=POST>
+        <!-- <form action="{{url_for('capture')}}" method=POST id="applicationForm"> -->
           <div class="detail-group">
              <h3>Personal Information</h3>
              <div class="details">
                  <table>
                          <tr>
                              <td class="label"> <label for="firstname">Firstname: </label> </td>
-                             <td class="input"> <input name="firstname" value="{{ request.form.firstname }}" type="text" required placeholder="John"> </td>
+                             <td class="input"> <input name="firstname" id="firstname" type="text" required placeholder="John"> </td>
                          </tr>
                          <tr>
                              <td> <label for="surname">Surname: </label> </td>
-                             <td> <input name="surname"  value="{{ request.form.surname }}" type="text" required placeholder="Doe"> </td>
+                             <td> <input name="surname"  id="surname" type="text" required placeholder="Doe"> </td>
                          </tr>
                          <tr>
                              <td> <label for="nationalid">National ID: </label> </td>
-                             <td> <input name="nationalid" type="text" value="{{ request.form.nationalid }}" required placeholder="22-345345X234-P"> </td>
+                             <td> <input name="nationalid" type="text" id="nationalid" required placeholder="22-345345X234-P"> </td>
                          </tr>
                          <tr>
                              <td> <label for="DOB">Date Of Birth:</label> </td>
-                             <td> <input name="DOB" value="{{ request.form.DOB }}" type="date" required> </td>
+                             <td> <input name="DOB" id="dob" type="date" required> </td>
                          </tr>
                          <tr>
                              <td>  <label for="Sex">Sex:</label> </td>
                              <td>
-                                 <select name="sex" value="{{ request.form.sex }}"  id="">
+                                 <select name="sex" id="sex">
                                      <option value="Male">Male</option>
                                      <option value="Female">Female</option>
                                  </select>
@@ -59,19 +59,19 @@
                          <tbody>
                              <tr>
                                  <td class="label"> <label for="email">Email: </label> </td>
-                                 <td class="input"> <input type="email" name="mail" value="{{ request.form.mail}}"required placeholder="John@gmail.com"> </td>
+                                 <td class="input"> <input type="email" name="mail" id="email" required placeholder="John@gmail.com"> </td>
                              </tr>
                              <tr>
                                  <td> <label for="phone1">Phone 1: </label> </td>
-                                 <td>  <input type="text" name="phone1" value="{{ request.form.phone1}}" required placeholder="0772334661"> </td>
+                                 <td>  <input type="text" name="phone1" id="phone1" required placeholder="0772334661"> </td>
                              </tr>
                              <tr>
                                  <td> <label for="phone2">Phone 2: </label> </td>
-                                 <td> <input type="text" name="phone2" value="{{ request.form.phone2}}" placeholder="0772334661"> </td>
+                                 <td> <input type="text" name="phone2" id="phone2" placeholder="0772334661"> </td>
                              </tr>
                              <tr>
                                  <td style="vertical-align: top"> <label for="address">Address:</label> </td>
-                                 <td> <textarea name="address" value="{{ request.form.address }}" id="" cols="30" rows="6"></textarea> </td>
+                                 <td> <textarea name="address" id="address" cols="30" rows="6"></textarea> </td>
                              </tr>
                          </tbody>
                      </table>
@@ -82,11 +82,11 @@
                  <div class="details" id="qualification">
                          <div class="field" id="qfield">
                              <label for="qualification">Qualification: </label>
-                             <input name="qualification" type="text" value="{{ request.form.qualification }}" placeholder="5 O levels including English and Maths">
+                             <input name="qualification" type="text" id="qualification1" placeholder="5 O levels including English and Maths">
                              <label for="awardingInstitute">Awarding Institute: </label>
-                             <input name="awardingInstitute"  value="{{ request.form.awardingInstitute }}" type="text" placeholder="ZIMSEC">
+                             <input name="awardingInstitute"  id="awardingInstitute1"  type="text" placeholder="ZIMSEC">
                              <label for="certificate">Attach Certificate:</label>
-                             <input type="file" name="certificate" value="{{ request.form.certificate }}" id="" required>
+                             <input type="file" name="certificate"  id="certificate1" required>
                          </div>
                          <span class="button" id="addqualification" onclick="addQualificationField()">Add Another</span>
                          <span class="button" id="removequalification" onclick="removeQualificationField()">Remove</span>
@@ -97,90 +97,99 @@
                  <div class="details" id="workexperience">
                          <div class="field" id="wfield">
                              <label for="organisation">Organisation: </label>
-                             <input name="organisation" id="organisation1" type="text"  placeholder="Harare Institute Of Technology">
+                             <input name="organisation" id="organisation1" type="text" value="{{ request.form.organisation }}" placeholder="Harare Institute Of Technology">
                              <label for="position">Position: </label>
-                             <input name="position" id="position1" type="text"  placeholder="Receptionist">
-                             <label for="time-frame">Time Frame: </label>
-                             <input name="timeframe" id="timeframe1" type="text"   placeholder="2000-2002">
+                             <input name="position" id="position1" type="text" value="{{ request.form.position }}"  placeholder="Receptionist">
+                             <label for="timeframe">Time Frame: </label>
+                             <input name="timeframe" id="timeframe1" type="text" value=" {{ request.form.timeframe }} "  placeholder="2000-2002">
                          </div>
-                         <textarea style = "display:none" name="workexperience" id="workexperiences" cols="30" rows="10"></textarea>
+                         <!-- <textarea style = "display:none" name="workexperience" id="workexperiences" cols="30" rows="10"></textarea> -->
                          <span class="button" id="add" onclick="addWorkExperienceField()">Add Another</span>
                          <span class="button" id="removeWorkExperienceField" onclick="removeWorkExperienceField()">Remove</span>
                  </div>
          </div>
+         <!-- <input type="submit" value="" id="submitHandle" style="display:none"> -->
+         <button class="button submit-button" onclick="sendApplication()">Apply</button>
 
-         <button class="button submit-button" type="submit">Apply</button>
-
-     </form>
+     <!-- </form> -->
  </div>
 </body>
 
+<script src="../static/js/addRemove.js"></script>
+<script src="../static/js/axios.min.js"></script>
+
 <script>
-    // function to add dynamically add fields to work experience
-    function addWorkExperienceField(){
-        var button = document.getElementById('add')
-        var workexperience = document.getElementById('workexperience')
-        var fieldNumbers = workexperience.childElementCount - 3;
-        textarea = document.getElementById('workexperiences')
-        textarea.value = textarea.value + " \n " + document.getElementById('organisation' + fieldNumbers).value + ", " + document.getElementById('position' + fieldNumbers).value + ", " + document.getElementById('timeframe' + fieldNumbers).value
-        fieldNumbers += 1
-        var cloneElement = workexperience.firstElementChild.cloneNode(true)
-        cloneElement.className = "field added"
-        cloneElement.id = "wfield" + fieldNumbers
-        cloneElement.childNodes[3].value = ""
-        cloneElement.childNodes[7].value = ""
-        cloneElement.childNodes[11].value = ""
-        cloneElement.childNodes[3].id = "organisation" + fieldNumbers
-        cloneElement.childNodes[7].id = "position" + fieldNumbers
-        cloneElement.childNodes[11].id = "timeframe" + fieldNumbers
-        
-        workexperience.insertBefore(cloneElement,button)
-
-    }
-    // function to add dynamically add fields to qualifications
-    function addQualificationField(){
-        var button = document.getElementById('addqualification')
+    function getFormData(){
         var qualification = document.getElementById('qualification')
-        var fieldNumbers = qualification.childElementCount - 1;
-        var cloneElement = qualification.firstElementChild.cloneNode(true)
-        cloneElement.className = "field added"
-        cloneElement.id = "qfield" + fieldNumbers
-        cloneElement.childNodes[3].value = ""
-        cloneElement.childNodes[7].value = ""
-        cloneElement.childNodes[11].value = ""
-        cloneElement.childNodes[3].name = "qualification" + fieldNumbers
-        cloneElement.childNodes[7].name = "awardingInstitute" + fieldNumbers
-        cloneElement.childNodes[11].name = "certificate" + fieldNumbers
-        qualification.insertBefore(cloneElement,button)
-    }
-    // function to remove unwanted field from work exprerience
-    function removeWorkExperienceField(){
-        try{
-            var workexperience = document.getElementById('workexperience')
-            var fieldNumbers = workexperience.childElementCount - 3;
-            var childName = 'wfield' + fieldNumbers;
-            var parent = document.getElementById('workexperience')
-            var child = document.getElementById(childName)
-            parent.removeChild(child)
-        } catch(e){
-            alert('There Must be At least One Field')
+        var numberOfQualifications = qualification.childElementCount - 2
+        var qualifications = {}
+        var workexperience = document.getElementById('workexperience')
+        var numberOfWorkExperiences = workexperience.childElementCount - 2 
+        var workexperiences = {}
+        
+        if( numberOfQualifications == 1 ){
+            qualifications.qualification1 = {
+                qualification: document.getElementById('qualification1').value,
+                awardingInstitute: document.getElementById('awardingInstitute1').value,
+                certificate: document.getElementById('certificate1').value
+            }
+
+        } else{
+            for( var i = 1; i <= numberOfQualifications; i++){
+                var qualification = 'qualification' + i
+                qualifications[qualification] = {
+                qualification: document.getElementById('qualification' + i).value,
+                awardingInstitute: document.getElementById('awardingInstitute' + i).value,
+                certificate: document.getElementById('certificate' + i).value
+            }
+            }
         }
 
-    }
-
-    function removeQualificationField(){
-        try{
-            var qualification = document.getElementById('qualification')
-            var fieldNumbers = qualification.childElementCount - 3
-            var childName = 'qfield' + fieldNumbers
-            var child = document.getElementById(childName)
-            qualification.removeChild(child)
-        } catch(e){
-            alert('There Must Be At Least One Field')
+        if( numberOfWorkExperiences == 1){
+            workexperiences.workexperience1 = {
+                organisation: document.getElementById('organisation1').value,
+                position: document.getElementById('position1').value,
+                timeframe: document.getElementById('timeframe1').value
+            }
+        } else {
+            for( var i = 1; i <= numberOfWorkExperiences; i++){
+                var workexperience = 'workexperience' + i
+                workexperiences[workexperience] = {
+                    organisation: document.getElementById('organisation' + i).value,
+                    position: document.getElementById('position' + i).value,
+                    timeframe: document.getElementById('timeframe' + i).value
+                }
+            }
         }
 
+        data = {
+            firstname: document.getElementById('firstname').value,
+            surname: document.getElementById('surname').value,
+            nationalid: document.getElementById('nationalid').value,
+            dob: document.getElementById('dob').value,
+            sex: document.getElementById('sex').value,
+            email: document.getElementById('email').value,
+            phone1: document.getElementById('phone1').value,
+            phone2: document.getElementById('phone2').value,
+            address: document.getElementById('address').value,
+            qualifications: qualifications,
+            workexperiences: workexperiences
+        }
+        return data;
+        
+        
+
     }
 
+    function sendApplication(){
+        data = getFormData()
+        axios.post('/capture', data
+        ).then(function(res){
+            document.write(res.data)
+        }).catch(function(error){
+            document.write(error)
+        })
+    }
 
 </script>
 

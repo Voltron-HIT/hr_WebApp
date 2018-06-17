@@ -4,6 +4,7 @@ import pymongo
 import bcrypt
 import pandas as pd
 import collections
+from bson import Binary
 from functools import wraps
 from datetime import date
 from itsdangerous import SignatureExpired, URLSafeTimedSerializer
@@ -124,35 +125,39 @@ def newPasswordEntry():
 @app.route('/capture', methods=['POST', 'GET'])
 def capture():
 
-    client = pymongo.MongoClient('mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo')
-    db = client['mongo']
+    # client = pymongo.MongoClient('mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo')
+    # db = client['mongo']
+    # if request.method == 'POST':
+    #     current = date.today()
+    #     dateOfBirth = request.form['DOB']
+
+    #     cd = current.strftime('%Y, %m, %d')
+
+    #     currentDate = cd.split(",")
+    #     dob = dateOfBirth.split("-")
+
+    #     c = []
+    #     d = []
+    #     for i in currentDate:
+    #         c.append(int(i))
+    #     for i in dob:
+    #         d.append(int(i))
+
+    #     age = int((date(c[0], c[1], c[2]) - date(d[0], d[1], d[2])).days / 365)
+    #     file = request.files.get('certificate')
+    #     bFile = file.read()
+    #     bitFile = bytes(bFile)
+
+    #     db.applicants.insert({'name' : request.form['firstname'] + ' ' + request.form['surname'], 'contact details': request.form['address'] + ' ' + request.form['mail'] + ' ' + request.form['phone1'] + ' '
+    #      + request.form['phone2'],
+    #     'sex':request.form['sex'], 'age': age, 'academic qualifications': request.form['qualification'] ,'awarding institute':request.form['awardingInstitute'],'certificate': Binary(bitFile)
+    #     ,'work experience':'Worked at ' + request.form['organisation'] + ' ' + 'was the  ' + request.form['position'] +' from '+request.form['timeframe'], 'comments': ' no comment', 'salary': ' '})
+
     if request.method == 'POST':
-        current = date.today()
-        dateOfBirth = request.form['DOB']
-
-        cd = current.strftime('%Y, %m, %d')
-
-        currentDate = cd.split(",")
-        dob = dateOfBirth.split("-")
-
-        c = []
-        d = []
-        for i in currentDate:
-            c.append(int(i))
-        for i in dob:
-            d.append(int(i))
-
-        age = int((date(c[0], c[1], c[2]) - date(d[0], d[1], d[2])).days / 365)
-        file = request.files.get('certificate')
-        bFile = file.read()
-        bitFile = bytes(bFile)
-
-        db.applicants.insert({'name' : request.form['firstname'] + ' ' + request.form['surname'], 'contact details': request.form['address'] + ' ' + request.form['mail'] + ' ' + request.form['phone1'] + ' '
-         + request.form['phone2'],
-        'sex':request.form['sex'], 'age': age, 'academic qualifications': request.form['qualification'] ,'awarding institute':request.form['awardingInstitute'],'certificate': Binary(bitFile)
-        ,'work experience':'Worked at ' + request.form['organisation'] + ' ' + 'was the  ' + request.form['position'] +' from '+request.form['timeframe'], 'comments': ' no comment', 'salary': ' '})
-
-
+        data = request.get_json()
+        print(data)
+        return 'Application Successful'
+    
     return render_template('applicationform.html')
 
 
