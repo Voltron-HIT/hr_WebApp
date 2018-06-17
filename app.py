@@ -5,8 +5,9 @@ import bcrypt
 import pandas as pd
 import collections
 import re
+from bson import Binary
 from functools import wraps
-from datetime import datetime
+from datetime import datetime, date
 from itsdangerous import SignatureExpired, URLSafeTimedSerializer
 
 app = Flask(__name__)
@@ -31,7 +32,6 @@ def login_required(f):
             return redirect(url_for('login'))
 
     return wrap
-
 
 @app.route('/')
 @app.route('/home')
@@ -82,6 +82,11 @@ def adjudication():
 
 @app.route('/shortlist')
 def shortlist():
+
+    client = pymongo.MongoClient("mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo")
+    db = client['mongo']
+
+    
 	return render_template('shortlist.html')
 
 @app.route('/resetPassword')
@@ -166,14 +171,19 @@ def capture():
         for i in dob:
             d.append(int(i))
 
+
+        #calculating age
         age = int((date(c[0], c[1], c[2]) - date(d[0], d[1], d[2])).days / 365)
-        file = request.files.get('certificate')
+        file = request.files['certificate']
         bFile = file.read()
         bitFile = bytes(bFile)
 
+        #function to check for qualifications
+
+
         db.applicants.insert({'name' : request.form['firstname'] + ' ' + request.form['surname'], 'contact details': request.form['address'] + ' ' + request.form['mail'] + ' ' + request.form['phone1'] + ' '
          + request.form['phone2'],
-        'sex':request.form['sex'], 'age': age, 'academic qualifications': request.form['qualification'] ,'awarding institute':request.form['awardingInstitute'],'certificate': Binary(bitFile)
+        'sex':request.form['sex'], 'age': age, 'academic qualifications': request.form['qualification1'] ,'awarding institute':request.form['awardingInstitute'],'certificate': Binary(bitFile)
         ,'work experience':'Worked at ' + request.form['organisation'] + ' ' + 'was the  ' + request.form['position'] +' from '+request.form['timeframe'], 'comments': ' no comment', 'salary': ' '})
 
 
@@ -190,8 +200,8 @@ def applicantList():
     data = []
     keys = []
     values = []
-    
-    
+
+
 
     for i in user:
         keys = list(i.keys())
@@ -199,7 +209,7 @@ def applicantList():
         dictionary = dict(zip(values, keys))
 
         data.append(collections.OrderedDict(map(reversed, dictionary.items())))
-    
+
     df = pd.DataFrame(data)
     df = df.drop(["_id"], axis=1)
 
