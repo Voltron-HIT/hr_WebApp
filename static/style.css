@@ -8,7 +8,7 @@ html,body{
 nav ul li{
 	display: inline;
 	list-style-type: none;
-	 
+
 }
 h1, h3{
 	color: #07005B;
@@ -36,7 +36,7 @@ nav div ul li a{
 	color: #ffb400;
 	webkit-transition: 0.5s;
 	o-transition: 0.5s;
-	transition: 0.5s; 
+	transition: 0.5s;
 }
 nav div ul li a:hover{
 	color: white;
@@ -94,14 +94,15 @@ fieldset{
 }
 .expand:hover{
 	width: 80%;
-	height: 400px;
 	background-color: #;
+	height: auto;
 }
 .description{
 	visibility: hidden;
 }
 .expand:hover .description{
 	visibility: visible;
+	height: -webkit-fit-content;
 }
 .check{
 	float: right;
@@ -186,7 +187,7 @@ span img{
 	height: 360px;
 }
 table{
-	margin-left: 5%; 
+	margin-left: 5%;
 	border-spacing: 0px;
 }
 table th{

@@ -1,34 +1,46 @@
-{% extends "list.html" %}
-                        {% block title %} Full Applicant List {% endblock %}
-                        {% block heading %} Applicant List {% endblock %}
-                        {% block content %}
-                        <table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>name</th>
-      <th>contact details</th>
-      <th>sex</th>
-      <th>age</th>
-      <th>academic qualifications</th>
-      <th>awarding institute</th>
-      <th>work experience</th>
-      <th>comments</th>
-      <th>salary</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Theophilus Chidiebere Okoye</td>
-      <td>Flat No. 1\r\n53 Magamba Way \r\nChinhoyi theo...</td>
-      <td>Male</td>
-      <td>19</td>
-      <td>9 O' Level Passes including Mathematics and En...</td>
-      <td>ZIMSEC</td>
-      <td>Worked at EDGARS was the  CSA from 2016 - Present</td>
-      <td>no comment</td>
-      <td></td>
-    </tr>
-  </tbody>
+{% extends "list.html" %} {% block title %} Full Applicant List {% endblock %} {% block heading %} Applicant List {% endblock %} {% block content %}
+<table border="1" class=dataframe>
+    <thead>
+        <tr style="text-align: right;">
+            <th></th>
+            <th>name</th>
+            <th>contact details</th>
+            <th>sex</th>
+            <th>age</th>
+            <th>academic qualifications</th>
+            <th>awarding institute</th>
+            <th>work experience</th>
+            <th>comments</th>
+            <th>salary</th>
+            <th>certificate</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>0</th>
+            <td>Theophilus Chidiebere Okoye</td>
+            <td>Flat No. 1\r\n53 Magamba Way \r\nChinhoyi theo...</td>
+            <td>Male</td>
+            <td>19</td>
+            <td>9 O' Level Passes including Mathematics and En...</td>
+            <td>ZIMSEC</td>
+            <td>Worked at EDGARS was the CSA from 2016 - Present</td>
+            <td>no comment</td>
+            <td></td>
+            <td>NaN</td>
+        </tr>
+        <tr>
+            <th>1</th>
+            <td>Chidiebere Okoye</td>
+            <td>47 Castens theophilusokoye@outlook.com 263 263</td>
+            <td>Male</td>
+            <td>19</td>
+            <td>9 'O Levels</td>
+            <td>ZIMSEC</td>
+            <td>Worked at PMT was the TR from 2016 - 2017</td>
+            <td>no comment</td>
+            <td></td>
+            <td>b'%PDF-1.5\r%\xe2\xe3\xcf\xd3\r\n61 0 obj\r&lt;&lt;/...</td>
+        </tr>
+    </tbody>
 </table>{% endblock %}
