@@ -37,7 +37,7 @@ def login_required(f):
 @app.route('/')
 @app.route('/home')
 def home():
-
+	
     position = ""
     deadline = None
     status = None
@@ -148,7 +148,19 @@ def newPasswordEntry():
 
 @app.route('/capture', methods=['POST', 'GET'])
 def capture():
-
+	class Applicants(db.Model):
+		__tablename__ = 'employees'
+		
+		id = db.Column(db.Integer, primary_key=True)
+		name = db.Column(db.String(60), index=True)
+		contactdetails = db.Column(db.String(60), index=True)
+		sex = db.Column(db.String(60), index=True)
+		age = db.Column(db.String(60), index=True)
+		academic_qualifications = db.Column(db.String(60), index=True)
+		awarding_institute = db.Column(db.String(60), index=True)
+		certificate = db.Column(db.String(60), index=True, unique=True)
+		work_experience = db.Column(db.String(60), index=True, unique=True)
+    
     # client = pymongo.MongoClient('mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo')
     # db = client['mongo']
     # if request.method == 'POST':
@@ -177,12 +189,12 @@ def capture():
     #     'sex':request.form['sex'], 'age': age, 'academic qualifications': request.form['qualification'] ,'awarding institute':request.form['awardingInstitute'],'certificate': Binary(bitFile)
     #     ,'work experience':'Worked at ' + request.form['organisation'] + ' ' + 'was the  ' + request.form['position'] +' from '+request.form['timeframe'], 'comments': ' no comment', 'salary': ' '})
 
-    if request.method == 'POST':
-        data = request.get_json()
-        print(data)
-        return 'Application Successful'
+	if request.method == 'POST':
+		data = request.get_json()
+		print(data)
+		return 'Application Successful'
     
-    return render_template('applicationform.html')
+	return render_template('applicationform.html')
 
 
 
@@ -262,6 +274,33 @@ def logout():
     session.clear()
     return redirect(url_for('login'))
 
+	
+@app.route('/adjudicate')
+@login_required
+def adjudicate():
+	class Adjudication(db.Model):
+		__tablename__ = 'adjudication'
+		
+		id = db.Column(db.Integer, primary_key=True)
+		name = db.Column(db.String(60), index=True)
+		contactdetails = db.Column(db.String(60), index=True)
+		marks = db.column(db.String(60), index=True)
+
+		
+@app.route('/adduser')
+@login_required
+def adduser():
+	class Credentials(db.Model):
+		__tablename__ = 'credentials'
+		
+		id = db.Column(db.Integer, primary_key=True)
+		username = db.Column(db.String(60), index=True unique=True)
+		password = db.Column(db.String(60), index=True)
+		email = db.Column(db.String(60), index=True, unique=True)
+			
+
+
+	
 #404 page
 @app.errorhandler(404)
 def page_not_found(e):
