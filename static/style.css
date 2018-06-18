@@ -1,7 +1,7 @@
 html,body{
 	height: 100%;
 	max-width: 100%;
-	min-width: 850px;
+	min-width: 1000px;
 	font-family: sans-serif;
 	margin: 0px;
 }
@@ -76,7 +76,7 @@ fieldset{
 	clear: both;
 	transition: height 0.3s ease-in-out;
 	-webkit-transition:height 0.3s ease-in-out;
-	width: 80%;
+	width: 90%;
 	height: 120px;
 }
 .vacancy-details, fieldset img{
@@ -93,7 +93,7 @@ fieldset{
     box-shadow: 5px 5px 5px #888888;
 }
 .expand:hover{
-	width: 80%;
+	width: 90%;
 	background-color: #;
 	height: auto;
 }

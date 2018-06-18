@@ -17,17 +17,18 @@
 	</nav>
 	<div class="space"> </div>
 	<div class="main-wrapper">
-		<aside class="aside">
+		<!-- <aside class="aside">
 			<ul>
 				<li>Fincance Department</li>
 				<li>Maintainance Department</li>
 				<li>Catering Department</li>
 			</ul>
-		</aside>
+		</aside> -->
 		<div class="main-container">
-
 					<fieldset class="expand">
-						<span><img src="../static/img/finance icon.png"></span>
+						<div class="apply-now">
+								<a href="{{apply_url}}">Apply Now</a>
+						</div>
 						<div class="vacancy-details">
 							<h1 class="h3">{{position}} | <small><strong>{{status}}</strong></small></h1>
 							<div class="description">
@@ -46,9 +47,6 @@
 								{% endfor %}
 
 							</div>
-						</div>
-						<div class="apply-now">
-								<a href="">Apply Now</a>
 						</div>
 					</fieldset><br>
 

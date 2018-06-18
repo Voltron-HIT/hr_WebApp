@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro" rel="stylesheet">
+    <link rel="stylesheet" href="../static/applicationstyle.css">
+    <link rel="stylesheet" href="../static/evaluatedliststyle.css">
+    <link rel="shortcut icon" href="..\static\favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Evaluated List</title>
+</head>
+<body>
+    <div class="heading">
+        <span> <a href="{{url_for('index')}}"> <i class="material-icons md-48">arrow_back</i> </a> </span>
+        <h1> <img src="../static/favicon.ico" alt=""> Evaluated List</h1>
+    </div>
+    <div class="wrapper" id="list">
+        
+        <!-- <form class="searchForm" action="searchEvaluatedList">
+            <div class="search" >
+                <input class="searchInput" type="text" name="" id="">
+                <button class="searchButton" type="submit" > <i class="material-icons md-24">search</i> </button>
+            </div>
+        </form> -->
+        <!-- seach tool bar if neeeded  -->
+       
+        <table style="width: 100%">
+            <tbody>
+                <tr>
+                    <th class="tableheading tablename"> Name </th>
+                    <th class="tableheading"> Post </th>
+                    <th class="tableheading"> Score </th>
+                </tr>
+                <tr>
+                    <td>Blessed Tawanda Mahuni </td>
+                    <td> Chief Technology Officer </td>
+                    <td> 10.0 </td>
+                </tr>
+                <tr>
+                    <td>Blessed Tawanda Mahuni </td>
+                    <td> Chief Technology Officer </td>
+                    <td> 10.0 </td>
+                </tr>
+                <tr>
+                        <td>Blessed Tawanda Mahuni </td>
+                        <td> Chief Technology Officer </td>
+                        <td> 10.0 </td>
+                    </tr>            
+            </tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    function print(){
+        var prtContent = document.getElementById("list");
+        var WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
+        WinPrint.document.write(prtContent.innerHTML);
+        WinPrint.document.close();
+        WinPrint.focus();
+        WinPrint.print();
+        WinPrint.close();
+    }
+</script>
+
+
+</html>

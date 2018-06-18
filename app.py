@@ -4,11 +4,13 @@ import pymongo
 import bcrypt
 import pandas as pd
 import collections
-from bson import Binary
 import re
+from bson import Binary
+import smsConfig
 from functools import wraps
 from datetime import datetime
 from itsdangerous import SignatureExpired, URLSafeTimedSerializer
+from twilio.rest import Client
 
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
@@ -21,6 +23,7 @@ salt = b'$2b$11$Za4hFNuzn3Rvw7gLnUVZCu'
 
 newpassword = None
 dbEmail = ""
+postSession = ""
 
 #Unrouted functions
 def login_required(f):
@@ -33,12 +36,20 @@ def login_required(f):
 
     return wrap
 
+def smss(sendTo):
+	'''uses one phone number for a free trail, function used in other functions as a extra feature'''
+	account_sid = smsConfig.accountSID
+	auth_token = smsConfig.authToken
+	client = Client(account_sid, auth_token)
+	message = client.messages.create(body='Hello there!',from_=smsConfig.twilioNumber,to='+263784428853')
+	return message.sid
 
 @app.route('/')
 @app.route('/home')
 def home():
+    global postSession
+    postSession = ""
 
-	
     position = ""
     deadline = None
     status = None
@@ -55,7 +66,7 @@ def home():
         minimum_requirements = i['minimum requirements']
         responsibilities = i['responsibilities']
         deadline = i['deadline']
-
+        apply_url = url_for('test',token = i['post']  , _external = False)
         current = datetime.now()
 
         if current < deadline:
@@ -63,12 +74,48 @@ def home():
         else:
             status = "Expired Vacancy"
 
-    return render_template('index.html', minimum_requirements=minimum_requirements, responsibilities=responsibilities, position=position, status=status, deadline=deadline)
+    return render_template('index.html', minimum_requirements=minimum_requirements, responsibilities=responsibilities, position=position, status=status, deadline=deadline,apply_url=apply_url)
+
+
+@app.route('/test/<token>')
+def test(token):
+	'''keeps track of all the posts clicked for application or for editing vacancy'''
+	global postSession
+	postSession = token
+	return redirect(url_for('applicationForm'))
 
 
 @app.route('/humanResourceHome')
 def humanResourceHome():
-	return render_template('hr.html')
+    global postSession
+    postSession = ""
+
+    position = ""
+    deadline = None
+    status = None
+    minimum_requirements = []
+    responsibilities = []
+
+    client = pymongo.MongoClient("mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo")
+    db = client['mongo']
+
+    post = db.Vacancies.find()
+
+    for i in post:
+        position = i['post']
+        minimum_requirements = i['minimum requirements']
+        responsibilities = i['responsibilities']
+        deadline = i['deadline']
+        apply_url = url_for('test',token = i['post']  , _external = False)
+        current = datetime.now()
+
+        if current < deadline:
+            status = "Active Vacancy"
+        else:
+            status = "Deadline Pasted"
+
+    return render_template('hr.html', minimum_requirements=minimum_requirements, responsibilities=responsibilities, position=position, status=status, deadline=deadline,apply_url=apply_url)
+
 
 @app.route('/applicationForm')
 def applicationForm():
@@ -149,60 +196,34 @@ def newPasswordEntry():
 
 @app.route('/capture', methods=['POST', 'GET'])
 def capture():
-	class Applicants(db.Model):
-		__tablename__ = 'employees'
+    '''collects data from the application form and saves it to the database'''
+    global postSession
+    class Applicants(db.Model):
+        __tablename__ = 'employees'
 		
-		id = db.Column(db.Integer, primary_key=True)
-		name = db.Column(db.String(60), index=True)
-		contactdetails = db.Column(db.String(60), index=True)
-		national_id = db.Column(db.String(60), index=True, unique=True)
-		sex = db.Column(db.String(60), index=True)
-		age = db.Column(db.String(60), index=True)
-		academic_qualifications = db.Column(db.String(60), index=True)
-		awarding_institute = db.Column(db.String(60), index=True)
-		certificate = db.Column(db.String(60), index=True)
-		work_experience = db.Column(db.String(60), index=True)
+        id = db.Column(db.Integer, primary_key=True)
+        name = db.Column(db.String(60), index=True)
+        contactdetails = db.Column(db.String(60), index=True)
+        national_id = db.Column(db.String(60), index=True, unique=True)
+        sex = db.Column(db.String(60), index=True)
+        age = db.Column(db.String(60), index=True)
+        academic_qualifications = db.Column(db.String(60), index=True)
+        awarding_institute = db.Column(db.String(60), index=True)
+        certificate = db.Column(db.String(60), index=True)
+        work_experience = db.Column(db.String(60), index=True)
+
+    if request.method == 'POST':
+        data = request.get_json()
+        print(data)
+        return 'Application Successful'
     
-    # client = pymongo.MongoClient('mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo')
-    # db = client['mongo']
-    # if request.method == 'POST':
-    #     current = date.today()
-    #     dateOfBirth = request.form['DOB']
-
-    #     cd = current.strftime('%Y, %m, %d')
-
-    #     currentDate = cd.split(",")
-    #     dob = dateOfBirth.split("-")
-
-    #     c = []
-    #     d = []
-    #     for i in currentDate:
-    #         c.append(int(i))
-    #     for i in dob:
-    #         d.append(int(i))
-
-    #     age = int((date(c[0], c[1], c[2]) - date(d[0], d[1], d[2])).days / 365)
-    #     file = request.files.get('certificate')
-    #     bFile = file.read()
-    #     bitFile = bytes(bFile)
-
-    #     db.applicants.insert({'name' : request.form['firstname'] + ' ' + request.form['surname'], 'contact details': request.form['address'] + ' ' + request.form['mail'] + ' ' + request.form['phone1'] + ' '
-    #      + request.form['phone2'],
-    #     'sex':request.form['sex'], 'age': age, 'academic qualifications': request.form['qualification'] ,'awarding institute':request.form['awardingInstitute'],'certificate': Binary(bitFile)
-    #     ,'work experience':'Worked at ' + request.form['organisation'] + ' ' + 'was the  ' + request.form['position'] +' from '+request.form['timeframe'], 'comments': ' no comment', 'salary': ' '})
-
-	if request.method == 'POST':
-		data = request.get_json()
-		print(data)
-		return 'Application Successful'
-    
-	return render_template('applicationform.html')
+    return render_template('applicationform.html')
 
 
 
 @app.route('/applicantList')
 def applicantList():
-
+    '''shows the list of applicants saved to the database'''
     client = pymongo.MongoClient("mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo")
     db = client['mongo']
     user = db.applicants.find({})
@@ -221,6 +242,7 @@ def applicantList():
     
     df = pd.DataFrame(data)
     df = df.drop(["_id"], axis=1)
+    #pd.set_option('max_colwidth', 1000)
 
 
 
@@ -245,6 +267,7 @@ def applicantList():
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():
+    '''verifies entered credentials with that in the database'''
     error_message = ""
     #MongoDB password retrieval
     client = pymongo.MongoClient('mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo')
@@ -268,13 +291,6 @@ def login():
             error_message = 'Invalid Credentials. Please try again.'
 
     return render_template('login.html', Error_Message=error_message, System_Name="")
-
-
-@app.route('/logout')
-@login_required
-def logout():
-    session.clear()
-    return redirect(url_for('login'))
 
 	
 @app.route('/adjudicate')
@@ -318,7 +334,14 @@ def addvacancy():
 		name= db.Column(db.String(60), index=True)
 		adju_post=db.Column(db.String(60), index=True)
 		intervw_date=db.Column(db.datetime)
-	   
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
+
 #404 page
 @app.errorhandler(404)
 def page_not_found(e):
