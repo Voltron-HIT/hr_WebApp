@@ -37,6 +37,7 @@ def login_required(f):
 @app.route('/')
 @app.route('/home')
 def home():
+
 	
     position = ""
     deadline = None
@@ -154,12 +155,13 @@ def capture():
 		id = db.Column(db.Integer, primary_key=True)
 		name = db.Column(db.String(60), index=True)
 		contactdetails = db.Column(db.String(60), index=True)
+		national_id = db.Column(db.String(60), index=True, unique=True)
 		sex = db.Column(db.String(60), index=True)
 		age = db.Column(db.String(60), index=True)
 		academic_qualifications = db.Column(db.String(60), index=True)
 		awarding_institute = db.Column(db.String(60), index=True)
-		certificate = db.Column(db.String(60), index=True, unique=True)
-		work_experience = db.Column(db.String(60), index=True, unique=True)
+		certificate = db.Column(db.String(60), index=True)
+		work_experience = db.Column(db.String(60), index=True)
     
     # client = pymongo.MongoClient('mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo')
     # db = client['mongo']
@@ -294,13 +296,29 @@ def adduser():
 		__tablename__ = 'credentials'
 		
 		id = db.Column(db.Integer, primary_key=True)
-		username = db.Column(db.String(60), index=True unique=True)
+		username = db.Column(db.String(60), index=True ,unique=True)
 		password = db.Column(db.String(60), index=True)
 		email = db.Column(db.String(60), index=True, unique=True)
 			
 
-
-	
+@app.route('/addvancy')
+@login_required
+def addvacancy():
+	class Vacancy(db.Model):
+		__tablename__='vacancy'
+		
+		id = db.Column(db.Integer, primary_key=True)
+		post = db.Column(db.String(60), index=True ,unique=True)
+		department = db.Column(db.String(60), index=True)
+		deadline = db.Column(db.String(60), index=True)
+		mini_requirements = db.Column(db.String(60), index=True)
+		responsibilites = db.Column(db.String(60), index=True)
+	   
+	   # adjudicator details 
+		name= db.Column(db.String(60), index=True)
+		adju_post=db.Column(db.String(60), index=True)
+		intervw_date=db.Column(db.datetime)
+	   
 #404 page
 @app.errorhandler(404)
 def page_not_found(e):
