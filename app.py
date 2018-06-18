@@ -5,6 +5,7 @@ import bcrypt
 import pandas as pd
 import collections
 from bson import Binary
+import json
 import re
 from bson import Binary
 from functools import wraps
@@ -37,17 +38,14 @@ def login_required(f):
 @app.route('/')
 @app.route('/home')
 def home():
-
-    position = ""
-    deadline = None
     status = None
-    minimum_requirements = []
-    responsibilities = []
 
     client = pymongo.MongoClient("mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo")
     db = client['mongo']
 
     post = db.Vacancies.find()
+
+    vac = []
 
     for i in post:
         position = i['post']
@@ -62,16 +60,18 @@ def home():
         else:
             status = "Expired Vacancy"
 
-    return render_template('index.html', minimum_requirements=minimum_requirements, responsibilities=responsibilities, position=position, status=status, deadline=deadline)
+        vac.append((position, minimum_requirements, responsibilities, deadline, status))
+
+    return render_template('index.html', post=vac)
 
 
 @app.route('/humanResourceHome')
 def humanResourceHome():
 	return render_template('hr.html')
 
-@app.route('/applicationForm')
-def applicationForm():
-	return render_template('applicationform.html')
+# @app.route('/applicationForm')
+# def applicationForm():
+# 	return render_template('applicationform.html')
 
 @app.route('/addVacancy')
 def addVacancy():
@@ -87,8 +87,8 @@ def shortlist():
     client = pymongo.MongoClient("mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo")
     db = client['mongo']
 
-    
-	return render_template('shortlist.html')
+
+    return render_template('shortlist.html')
 
 @app.route('/resetPassword')
 def resetPassword():
@@ -151,59 +151,124 @@ def newPasswordEntry():
     return render_template('newpassword.html')
 
 
-@app.route('/capture', methods=['POST', 'GET'])
+# @app.route('/capture', methods=['POST', 'GET'])
+# def capture():
+#
+#     client = pymongo.MongoClient('mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo')
+#     db = client['mongo']
+#     if request.method == 'POST':
+#         data = request.get_json()
+#
+#         firstname = data['firstname']
+#         surname = data['surname']
+#         nationalid = data['nationalid']
+#         dob = data['dob']
+#         sex = data['sex']
+#         email = data['email']
+#         phone1 = data['phone1']
+#         phone2 = data['phone2']
+#         address = data['address']
+#         # db.Temporary.insert(request.get_json())
+#
+#         applicants = db.Temporary.find_one({"firstname": firstname, "surname": surname})
+#
+#
+#         current = date.today()
+#         dateOfBirth = applicants['dob']
+#         cd = current.strftime('%Y, %m, %d')
+#         currentDate = cd.split(",")
+#         dob = dateOfBirth.split("-")
+#         c = []
+#         d = []
+#
+#         for i in currentDate:
+#             c.append(int(i))
+#         for i in dob:
+#             d.append(int(i))
+#
+#         #dynamic entry of age
+#         age = int((date(c[0], c[1], c[2]) - date(d[0], d[1], d[2])).days / 365)
+#         print(age)
+#
+#         #academic qualifications
+#         certificates = []
+#         qualifications = applicants['qualifications']
+#         print(type(qualifications))
+#         academics = ""
+#         comments = ""
+#
+#         for i in range(1, len(qualifications) + 1):
+#             s = "qualification" + str(i)
+#             academics += "{}.".format(str(i)) + " " + qualifications[s]['qualification'] + " "
+#         print(academics)
+#
+#         for i in range(1, len(qualifications) + 1):
+#             s = "qualification" + str(i)
+#             c = "certificate"
+#
+#
+#             file = request.files.get(c)
+#             bfile = file.read()
+#             bitFile = bytes(bfile)
+#             certificates.append(Binary(bitFile))
+#
+#         if certificates != []:
+#             comments = "Academic Certificates Attached"
+#
+#
+#
+#         db.applicants.insert({'name' :  firstname + ' ' + surname, 'contact details': applicants['email'] + applicants['phone1'] + applicants['phone2'] + applicants['address'], 'sex': applicants['sex'], 'age': age,
+#         'academic qualifications': academics, 'certificate': certificates})#,'awarding institute': 'xxx','certificate': certificates,
+#         # 'work experience': 'xxx' , 'comments': comments, 'salary': ' '})
+#
+#
+#     return render_template('applicationform.html')
+
+@app.route('/capture', methods=('GET', 'POST'))
 def capture():
 
-    # client = pymongo.MongoClient('mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo')
-    # db = client['mongo']
-    # if request.method == 'POST':
-    #     current = date.today()
-    #     dateOfBirth = request.form['DOB']
-
-    #     cd = current.strftime('%Y, %m, %d')
-
-    #     currentDate = cd.split(",")
-    #     dob = dateOfBirth.split("-")
-
-    #     c = []
-    #     d = []
-    #     for i in currentDate:
-    #         c.append(int(i))
-    #     for i in dob:
-    #         d.append(int(i))
-
-<<<<<<< HEAD
-
-        #calculating age
-        age = int((date(c[0], c[1], c[2]) - date(d[0], d[1], d[2])).days / 365)
-        file = request.files['certificate']
-        bFile = file.read()
-        bitFile = bytes(bFile)
-
-        #function to check for qualifications
-
-
-        db.applicants.insert({'name' : request.form['firstname'] + ' ' + request.form['surname'], 'contact details': request.form['address'] + ' ' + request.form['mail'] + ' ' + request.form['phone1'] + ' '
-         + request.form['phone2'],
-        'sex':request.form['sex'], 'age': age, 'academic qualifications': request.form['qualification1'] ,'awarding institute':request.form['awardingInstitute'],'certificate': Binary(bitFile)
-        ,'work experience':'Worked at ' + request.form['organisation'] + ' ' + 'was the  ' + request.form['position'] +' from '+request.form['timeframe'], 'comments': ' no comment', 'salary': ' '})
-=======
-    #     age = int((date(c[0], c[1], c[2]) - date(d[0], d[1], d[2])).days / 365)
-    #     file = request.files.get('certificate')
-    #     bFile = file.read()
-    #     bitFile = bytes(bFile)
->>>>>>> 8e8b218d138ca01f7d4b3e0d85892eab50512bc1
-
-    #     db.applicants.insert({'name' : request.form['firstname'] + ' ' + request.form['surname'], 'contact details': request.form['address'] + ' ' + request.form['mail'] + ' ' + request.form['phone1'] + ' '
-    #      + request.form['phone2'],
-    #     'sex':request.form['sex'], 'age': age, 'academic qualifications': request.form['qualification'] ,'awarding institute':request.form['awardingInstitute'],'certificate': Binary(bitFile)
-    #     ,'work experience':'Worked at ' + request.form['organisation'] + ' ' + 'was the  ' + request.form['position'] +' from '+request.form['timeframe'], 'comments': ' no comment', 'salary': ' '})
-
+    client = pymongo.MongoClient('mongodb://theophilus:chidi18@ds153380.mlab.com:53380/mongo')
+    db = client['mongo']
     if request.method == 'POST':
-        data = request.get_json()
-        print(data)
-        return 'Application Successful'
-    
+        print("Qualification " + request.form.get('numberOfQualifications'))
+        print("Work Exprerience " + request.form.get('numberOfWorkExperiences'))
+        name =  '''{} {}'''.format(request.form.get('firstname'),request.form.get('surname'))
+        contacts = '''{} , {} , {} , {} '''.format(request.form.get('phone1'), request.form.get('phone2') , request.form.get('email'), request.form.get('address'))
+        sex = request.form.get('sex')
+
+        current = date.today()
+        dateOfBirth = request.form.get('DOB')
+        cd = current.strftime('%Y, %m, %d')
+        currentDate = cd.split(",")
+        dob = dateOfBirth.split("-")
+        c = []
+        d = []
+
+        for i in currentDate:
+            c.append(int(i))
+        for i in dob:
+            d.append(int(i))
+
+        #dynamic entry of age
+        age = int((date(c[0], c[1], c[2]) - date(d[0], d[1], d[2])).days / 365)
+
+        #qualifications
+
+        #qualifications = request.form.get('qualification1')
+        #workexperience = request.form.get('workexperience')
+        file = request.files.get('cv')
+
+        cv = Binary(bytes(file.read()))
+
+        if cv != "" or cv is not None:
+            comments = "CV & Certificates attached"
+
+
+        #applyFor = post
+        status = "new"
+        #db.applicants.insert({'name':name, 'contact details':contact, 'sex':sex, 'age':age, 'academic qualifications':qualifications, 'work experience':workexperience, 'curriculum vitae':cv, 'comments':comments, 'status':status, 'post':applyFor })
+        db.applicants.insert({'name':name, 'contact details':contacts, 'sex':sex, 'age':age, 'curriculum vitae':cv, 'comments':comments, 'status':status})
+        return redirect(url_for('home'))
     return render_template('applicationform.html')
 
 

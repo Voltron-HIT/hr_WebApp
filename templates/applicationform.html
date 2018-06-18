@@ -21,7 +21,7 @@
         <span> Harare Institute Of Technology Job Application Form </span>
     </center>
     <div class="wrapper">
-        <!-- <form action="{{url_for('capture')}}" method=POST id="applicationForm"> -->
+      <form action="{{url_for('capture')}}" method=POST id="applicationForm" enctype="multipart/form-data">
         <div class="detail-group">
             <h3>Personal Information</h3>
             <div class="details">
@@ -84,11 +84,10 @@
             <div class="details" id="qualification">
                 <div class="field" id="qfield">
                     <label for="qualification">Qualification: </label>
-                    <input name="qualification" type="text" id="qualification1" placeholder="5 O levels including English and Maths">
+                    <input name="qualification1" type="text" id="qualification1" placeholder="5 O levels including English and Maths">
                     <label for="awardingInstitute">Awarding Institute: </label>
-                    <input name="awardingInstitute" id="awardingInstitute1" type="text" placeholder="ZIMSEC">
-                    <label for="certificate">Attach Certificate:</label>
-                    <input type="file" name="certificate" id="certificate1" required>
+                    <input name="awardingInstitute1" id="awardingInstitute1" type="text" placeholder="ZIMSEC">
+                    <input type="text" name="numberOfQualifications" value="1" id="numberOfQualifications" style="display:None">
                 </div>
                 <span class="button" id="addqualification" onclick="addQualificationField()">Add Another</span>
                 <span class="button" id="removequalification" onclick="removeQualificationField()">Remove</span>
@@ -99,21 +98,31 @@
             <div class="details" id="workexperience">
                 <div class="field" id="wfield">
                     <label for="organisation">Organisation: </label>
-                    <input name="organisation" id="organisation1" type="text" value="{{ request.form.organisation }}" placeholder="Harare Institute Of Technology">
+                    <input name="organisation1" id="organisation1" type="text" value="{{ request.form.organisation }}" placeholder="Harare Institute Of Technology">
                     <label for="position">Position: </label>
-                    <input name="position" id="position1" type="text" value="{{ request.form.position }}" placeholder="Receptionist">
+                    <input name="position1" id="position1" type="text" value="{{ request.form.position }}" placeholder="Receptionist">
                     <label for="timeframe">Time Frame: </label>
-                    <input name="timeframe" id="timeframe1" type="text" value=" {{ request.form.timeframe }} " placeholder="2000-2002">
+                    <input name="timeframe1" id="timeframe1" type="text" value=" {{ request.form.timeframe }} " placeholder="2000-2002">
+                    <input type="text" style="display:None" name="numberOfWorkExperiences" value="1" id="numberOfWorkExperiences">
                 </div>
                 <!-- <textarea style = "display:none" name="workexperience" id="workexperiences" cols="30" rows="10"></textarea> -->
                 <span class="button" id="add" onclick="addWorkExperienceField()">Add Another</span>
                 <span class="button" id="removeWorkExperienceField" onclick="removeWorkExperienceField()">Remove</span>
             </div>
         </div>
-        <!-- <input type="submit" value="" id="submitHandle" style="display:none"> -->
-        <button class="button submit-button" onclick="sendApplication()">Apply</button>
+        <div class="detail-group">
+            <h3>Curriculum Vitae</h3>
+            <div class="details" id="cv">
+                <div class="field" id="qfield">
+                    <input type="file" name="cv" id="cv" required><br>
+                    <label for="cv">( Attach Curriculum Vitae With All Necessary Certificates )</label>
+                </div>
+            </div>
+        </div>
+         <!--<input type="submit" value="" id="submitHandle" style="display:none">-->
+        <button class="button submit-button" type="submit">Apply</button>
 
-        <!-- </form> -->
+        </form>
     </div>
 </body>
 
@@ -133,7 +142,7 @@
             qualifications.qualification1 = {
                 qualification: document.getElementById('qualification1').value,
                 awardingInstitute: document.getElementById('awardingInstitute1').value,
-                certificate: document.getElementById('certificate1').value
+                certificate: document.getElementById('certificate1').files[0]
             }
 
         } else {
@@ -142,7 +151,7 @@
                 qualifications[qualification] = {
                     qualification: document.getElementById('qualification' + i).value,
                     awardingInstitute: document.getElementById('awardingInstitute' + i).value,
-                    certificate: document.getElementById('certificate' + i).value
+                    certificate: document.getElementById('certificate' + i).files[0]
                 }
             }
         }
@@ -186,10 +195,11 @@
     function sendApplication() {
         data = getFormData()
         axios.post('/capture', data).then(function(res) {
-            document.write(res.data)
+            document.write('success')
         }).catch(function(error) {
             document.write(error)
         })
+        // e.preventDefault();
     }
 </script>
 
