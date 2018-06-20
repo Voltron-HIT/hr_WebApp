@@ -263,7 +263,6 @@ def apply():
 
 @app.route('/applicantList')
 def applicantList():
-
     user = db.applicants.find({})
     data = []
     keys = []
@@ -297,6 +296,7 @@ def applicantList():
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():
+    '''verifies entered credentials with that in the database'''
     error_message = ""
 
     if request.method == 'POST':
@@ -317,6 +317,49 @@ def login():
             error_message = 'Invalid Credentials. Please try again.'
 
     return render_template('login.html', Error_Message=error_message, System_Name="")
+
+	
+@app.route('/adjudicate')
+@login_required
+def adjudicate():
+	class Adjudication(db.Model):
+		__tablename__ = 'adjudication'
+		
+		id = db.Column(db.Integer, primary_key=True)
+		name = db.Column(db.String(60), index=True)
+		contactdetails = db.Column(db.String(60), index=True)
+		marks = db.column(db.String(60), index=True)
+
+		
+@app.route('/adduser')
+@login_required
+def adduser():
+	class Credentials(db.Model):
+		__tablename__ = 'credentials'
+		
+		id = db.Column(db.Integer, primary_key=True)
+		username = db.Column(db.String(60), index=True ,unique=True)
+		password = db.Column(db.String(60), index=True)
+		email = db.Column(db.String(60), index=True, unique=True)
+			
+
+@app.route('/addvancy')
+@login_required
+def addvacancy():
+	class Vacancy(db.Model):
+		__tablename__='vacancy'
+		
+		id = db.Column(db.Integer, primary_key=True)
+		post = db.Column(db.String(60), index=True ,unique=True)
+		department = db.Column(db.String(60), index=True)
+		deadline = db.Column(db.String(60), index=True)
+		mini_requirements = db.Column(db.String(60), index=True)
+		responsibilites = db.Column(db.String(60), index=True)
+	   
+	   # adjudicator details 
+		name= db.Column(db.String(60), index=True)
+		adju_post=db.Column(db.String(60), index=True)
+		intervw_date=db.Column(db.datetime)
 
 
 @app.route('/logout')
