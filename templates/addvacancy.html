@@ -22,7 +22,7 @@
     </div>
 
     <div class="wrapper">
-        <form>
+        <form action="{{url_for('addVacancy')}}" method=POST>
                 <div class="detail-group">
                     <h3>Vacancy Details</h3>
                     <div class="details">
@@ -36,10 +36,6 @@
                                 <td> <input type="text" name="department" id="" placeholder="Software Engineering" required>  </td>
                             </tr>
                             <tr>
-                                <td> <label for="deadline">Deadline: </label> </td>
-                                <td> <input type="date" name="deadline" id="" required> </td>
-                            </tr>
-                            <tr>
                                 <td style="vertical-align: top"> Minimum Requirements: </td>
                                 <td> <textarea name="requirement" id="" cols="100" rows="10"></textarea>  </td>
                             </tr>
@@ -48,8 +44,22 @@
                                 <td> <textarea name="responsibilities" id="" cols="100" rows="10"></textarea> </td>
                             </tr>
                         </table>
-                        
+
                     </div>
+                </div>
+                <div class="detail-group">
+                    <h3>Vacancy Dates</h3>
+                    <div class="details">
+                        <table id='specialdates'>
+                          <tr>
+                              <td> <label for="deadline">Proposed Deadline: </label> </td>
+                              <td> <input type="date" name="deadline" id="" required> </td>
+                          </tr>
+                            <tr>
+                                <td> <label for="interviewdate">Proposed Interview Date: </label> </td>
+                                <td> <input type="date" name="interviewdate" id=""> </td>
+                            </tr>
+                        </table>
                 </div>
                 <div class="detail-group">
                     <h3>Adjudicator Details</h3>
@@ -57,57 +67,58 @@
                         <table id='afield'>
                             <tr>
                                 <td> <label for="name">Name: </label> </td>
-                                <td> <input type="text" name="name" id="" placeholder="John Dube">  </td>
+                                <td> <input type="text" name="name1" id="" placeholder="John Dube">  </td>
                             </tr>
                             <tr>
+                                <td> <label for="email">Email: </label> </td>
+                                <td> <input type="email" name="email1" id="" placeholder="johndube@hit.ac.zw">  </td>
+                            </tr>
+
+                            <tr>
                                 <td> <label for="adjudicatorpost">Adjudicator Post: </label> </td>
-                                <td>  <input type="text" name="adjudicatorpost" id="" placeholder="Chairperson"> </td>
+                                <td>  <input type="text" name="adjudicatorpost1" id="" placeholder="Chairperson"> </td>
                             </tr>
                             <tr>
                                 <td> <label for="adjudicatordepartment">Adjudicator Department: </label> </td>
-                                <td> <input type="text" name="adjudicatordepartment" id="" placeholder="Software Engineering"> </td>
-                            </tr>
-                            <tr>
-                                <td> <label for="interviewdate">Interview Date: </label> </td>
-                                <td> <input type="date" name="interviewdate" id=""> </td>
+                                <td> <input type="text" name="adjudicatordepartment1" id="" placeholder="Software Engineering"> </td>
                             </tr>
                         </table>
                         <span class="button" id="add" onclick="addAdjudicatorField()">Add Another</span>
                         <span class="button" id="removeAdjudicatorField" onclick="removeAdjudicatorField()">Remove</span>
                     </div>
-                    <input style="display: none" type="text" name="numberOfFields" id="fieldsNum" value="1">
+                    <input style="display: none" type="text" name="numberOfFields" id="numberOfAdjudicator" value="1">
                 </div>
                 <button class="button submit-button" type="submit"> Post vacancy </button>
         </form>
-        
+
     </div>
 </body>
 
 <script>
      // function to add dynamically add fields to adjudicators
     function addAdjudicatorField(){
-        var numberOfAdjudicator = document.getElementById('fieldsNum')
+        var numberOfAdjudicator = document.getElementById('numberOfAdjudicator')
         numberOfAdjudicator.value = Number(numberOfAdjudicator.value) + 1
         var button = document.getElementById('add')
         var adjudicator = document.getElementById('adjudicator')
         var fieldNumbers = adjudicator.childElementCount - 1;
         var cloneElement = adjudicator.firstElementChild.cloneNode(true)
-        var parent = cloneElement.childNodes[1]
-        var child = cloneElement.childNodes[1].childNodes[6]
-        parent.removeChild(child)
+
         cloneElement.id = "afield" + fieldNumbers
         cloneElement.childNodes[1].childNodes[0].childNodes[3].childNodes[1].value = ""
         cloneElement.childNodes[1].childNodes[2].childNodes[3].childNodes[1].value = ""
         cloneElement.childNodes[1].childNodes[4].childNodes[3].childNodes[1].value = ""
+        cloneElement.childNodes[1].childNodes[6].childNodes[3].childNodes[1].value = ""
         cloneElement.childNodes[1].childNodes[0].childNodes[3].childNodes[1].name = "name" + fieldNumbers
-        cloneElement.childNodes[1].childNodes[2].childNodes[3].childNodes[1].name = "adjudicatorpost" + fieldNumbers
-        cloneElement.childNodes[1].childNodes[4].childNodes[3].childNodes[1].name = "adjudicatordepartment" + fieldNumbers
+        cloneElement.childNodes[1].childNodes[2].childNodes[3].childNodes[1].name = "email" + fieldNumbers
+        cloneElement.childNodes[1].childNodes[4].childNodes[3].childNodes[1].name = "adjudicatorpost" + fieldNumbers
+        cloneElement.childNodes[1].childNodes[6].childNodes[3].childNodes[1].name = "adjudicatordepartment" + fieldNumbers
         adjudicator.insertBefore(cloneElement,button)
     }
 
     function removeAdjudicatorField(){
         try{
-            var numberOfAdjudicator = document.getElementById('fieldsNum')
+            var numberOfAdjudicator = document.getElementById('numberOfAdjudicator')
             numberOfAdjudicator.value = Number(numberOfAdjudicator.value) - 1
             var adjudicator = document.getElementById('adjudicator')
             var fieldNumbers = adjudicator.childElementCount - 2

@@ -21,7 +21,7 @@
         <span> Harare Institute Of Technology Job Application Form </span>
     </center>
     <div class="wrapper">
-      <form action="{{url_for('capture')}}" method=POST id="applicationForm" enctype="multipart/form-data">
+      <form action="{{url_for('apply')}}" method=POST id="applicationForm" enctype="multipart/form-data">
         <div class="detail-group">
             <h3>Personal Information</h3>
             <div class="details">
@@ -61,7 +61,7 @@
                     <tbody>
                         <tr>
                             <td class="label"> <label for="email">Email: </label> </td>
-                            <td class="input"> <input type="email" name="mail" id="email" required placeholder="John@gmail.com"> </td>
+                            <td class="input"> <input type="email" name="email" id="email" required placeholder="John@gmail.com"> </td>
                         </tr>
                         <tr>
                             <td> <label for="phone1">Phone 1: </label> </td>

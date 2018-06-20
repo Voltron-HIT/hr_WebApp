@@ -17,19 +17,21 @@
 	</nav>
 	<div class="space"> </div>
 	<div class="main-wrapper">
+		<!--
 		<aside class="aside">
 			<ul>
-				<li>Fincance Department</li>
-				<li>Maintainance Department</li>
+				<li>Finance Department</li>
+				<li>Maintenance Department</li>
 				<li>Catering Department</li>
 			</ul>
 		</aside>
+	-->
 		{% for p in post %}
 		<div class="main-container">
 					<fieldset class="expand">
 						<span><img src="../static/img/finance icon.png"></span>
 						<div class="vacancy-details">
-							<h1 class="h3">{{p[0]}} | <small><strong>{{p[4]}}</strong></small></h1>
+							<h1 class="h3">{{p[0]}} </h1>
 							<div class="description">
 								<h4>Minimum Requirements</h4>
 								{% for min in p[1] %}
@@ -47,9 +49,11 @@
 
 							</div>
 						</div>
-						<div class="apply-now">
-								<a href="">Apply Now</a>
-						</div>
+
+									<div class="apply-now">
+											<a href="{{p[3]}}">Apply Now</a>
+									</div>
+
 					</fieldset><br>
 		</div>
 		{% endfor %}

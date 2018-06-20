@@ -12,31 +12,46 @@
 		<div>
 			<ul>
 				<li><a href="{{url_for('humanResourceHome')}}"><b>HOME</b></a></li>
-				<li><a href="{{url_for('applicantList')}}">View Applicants List</a></li>
+				<li><a href="{{url_for('applicantList')}}">VIEW APPLICANTS LIST</a></li>
 				<li><a href="{{url_for('addVacancy')}}" type="button"><b>ADD VACANCY</b></a></li>
 			</ul>
 		</div>
 	</nav>
 	<div class="space"> </div>
 	<div class="main-wrapper">
+		<!--
 		<aside class="aside">
 			<ul>
-				<li>Fincance Department</li>
-				<li>Maintainance Department</li>	
+				<li>Finance Department</li>
+				<li>Maintenance Department</li>
 				<li>Catering Department</li>
 			</ul>
 		</aside>
+	-->
+		{% for p in post %}
 		<div class="main-container">
-			<fieldset class="expand">
-				<span><img src="../static/img/finance icon.png"></span>
-				<div class="vacancy-details">
-					<h1>Post</h1>
-					<label><h3>Description</h3></label>
-					<div class="description">
-						here is where the requirements will go
-					</div>
-				</div>
-				<div class="edit-vacancy">
+					<fieldset class="expand">
+						<span><img src="../static/img/finance icon.png"></span>
+						<div class="vacancy-details">
+							<h1 class="h3">{{p[0]}} | <small><strong>{{p[4]}}</strong></small></h1>
+							<div class="description">
+								<h4>Minimum Requirements</h4>
+								{% for min in p[1] %}
+										<ul>
+										  <li>{{ min }}</a></li>
+										</ul>
+								{% endfor %}
+
+								<h4>Responsibilities</h4>
+								{% for resp in p[2] %}
+										<ul>
+										  <li>{{ resp }}</a></li>
+										</ul>
+								{% endfor %}
+
+							</div>
+						</div>
+						<div class="edit-vacancy">
 					<ul>
 						<li><a href="">Edit</a></li>
 						<li><a href="#">Remove</a></li>
@@ -44,62 +59,9 @@
 						<li><a href="{{url_for('adjudication')}}">Adjudicate</a></li>
 					</ul>
 				</div>
-			</fieldset><br>
-			<fieldset class="expand">
-				<span><img src="../static/img/finance icon.png"></span>
-				<div class="vacancy-details">
-					<h1>Post</h1>
-					<label><h3>Description</h3></label>
-					<div class="description">
-						here is where the requirements will go
-					</div>
-				</div>
-				<div class="edit-vacancy">
-					<ul>
-						<li><a href="">Edit</a></li>
-						<li><a href="#">Remove</a></li>
-						<li><a href="">Shortlist</a></li>
-						<li><a href="">Adjudicate</a></li>
-					</ul>
-				</div>
-			</fieldset><br>
-			<fieldset class="expand">
-				<span><img src="../static/img/finance icon.png"></span>
-				<div class="vacancy-details">
-					<h1>Post</h1>
-					<label><h3>Description</h3></label>
-					<div class="description">
-						here is where the requirements will go
-					</div>
-				</div>
-				<div class="edit-vacancy">
-					<ul>
-						<li><a href="">Edit</a></li>
-						<li><a href="#">Remove</a></li>
-						<li><a href="">Shortlist</a></li>
-						<li><a href="">Adjudicate</a></li>
-					</ul>
-				</div>
-			</fieldset><br>
-			<fieldset class="expand">
-				<span><img src="../static/img/finance icon.png"></span>
-				<div class="vacancy-details">
-					<h1>Post</h1>
-					<label><h3>Description</h3></label>
-					<div class="description">
-						here is where the requirements will go
-					</div>
-				</div>
-				<div class="edit-vacancy">
-					<ul>
-						<li><a href="">Edit</a></li>
-						<li><a href="#">Remove</a></li>
-						<li><a href="">Shortlist</a></li>
-						<li><a href="">Adjudicate</a></li>
-					</ul>
-				</div>
-			</fieldset><br>
+					</fieldset><br>
 		</div>
-	</div>		
+		{% endfor %}
+	</div>
 </body>
 </html>
