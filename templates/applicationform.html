@@ -40,7 +40,7 @@
                         </tr>
                         <tr>
                             <td> <label for="DOB">Date Of Birth:</label> </td>
-                            <td> <input name="DOB" id="dob" type="date" required> </td>
+                            <td> <input name="DOB" id="dob" type="date" required> <span id="dobtooltip-text">  </span> </td>
                         </tr>
                         <tr>
                             <td> <label for="Sex">Sex:</label> </td>
@@ -73,7 +73,7 @@
                             </tr>
                             <tr>
                                 <td style="vertical-align: top"> <label for="address">Address:</label> </td>
-                                <td> <textarea name="address" id="address" cols="30" rows="6"></textarea> </td>
+                                <td> <textarea name="address" id="address" required cols="30" rows="6"></textarea> </td>
                             </tr>
                         </tbody>
                     </table>
@@ -84,9 +84,9 @@
                 <div class="details" id="qualification">
                     <div class="field" id="qfield">
                         <label for="qualification">Qualification: </label>
-                        <input name="qualification1" type="text" id="qualification1" placeholder="5 O levels including English and Maths">
+                        <input required name="qualification1" type="text" id="qualification1" placeholder="5 O levels including English and Maths">
                         <label for="awardingInstitute">Awarding Institute: </label>
-                        <input name="awardingInstitute1" id="awardingInstitute1" type="text" placeholder="ZIMSEC">
+                        <input required name="awardingInstitute1" id="awardingInstitute1" type="text" placeholder="ZIMSEC">
                         <input type="text" name="numberOfQualifications" value="1" id="numberOfQualifications" style="display:None">
                     </div>
                     <span class="button" id="addqualification" onclick="addQualificationField()">Add Another</span>
@@ -102,7 +102,7 @@
                         <label for="position">Position: </label>
                         <input name="position1" id="position1" type="text" value="{{ request.form.position }}" placeholder="Receptionist">
                         <label for="timeframe">Time Frame: </label>
-                        <input name="timeframe1" id="timeframe1" type="text" value=" {{ request.form.timeframe }} " placeholder="2000-2002">
+                        <input name="timeframe1" id="timeframe1" type="text" value="{{ request.form.timeframe }}" placeholder="2000-2002">
                         <input type="text" style="display:None" name="numberOfWorkExperiences" value="1" id="numberOfWorkExperiences">
                     </div>
 
@@ -112,22 +112,114 @@
             </div>
             <div class="detail-group">
                 <h3>Curriculum Vitae</h3>
-                <div class="details" id="cv">
+                <div class="details">
                     <div class="field" id="qfield">
-                        <input type="file" name="cv" id="cv" required><br>
-                        <label for="cv">( Attach Curriculum Vitae With All Necessary Certificates )</label>
+                        
+                        <div id="tooltip">
+                            <label for="cv">( Attach Curriculum Vitae With All Necessary Certificates )</label>
+                            <input type="file" name="cv" id="cv" required style="display: block">
+                            <span id="cvtooltip-text"></span>                            
+                        </div>
+                        
                     </div>
                 </div>
             </div>
-
+           
             <button class="button submit-button" type="submit">Apply</button>
 
         </form>
     </div>
+
+    <!--  Responses Message Modal -->
+<div id="messageModal" class="modal">
+        
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="response">Your Application Was Successful. An email will be sent to you shortly conforming your application</p>
+        </div>
+      
+      </div>
+
 </body>
 
-<script src="../static/js/addRemove.js">
-</script>
+<script src="../static/js/addRemove.js"></script>
+<script src="../static/js/validation.js"></script>
+<script src="../static/js/axios.min.js"></script>
 
+<script>
+    let applicationForm = document.getElementById( 'applicationForm' )
+    applicationForm.addEventListener( 'submit', sendApplication )
+    // code for modal
+    var modal = document.getElementById('messageModal');
+    var span = document.getElementsByClassName("close")[0];
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    span.onclick = function() {
+    modal.style.display = "none";
+}
+
+    // ends here
+
+    function sendApplication(event){
+        event.preventDefault()
+        let dob = document.getElementById('dob')        
+        let cv = document.getElementById('cv')
+        let cvmessage = document.getElementById('cvtooltip-text')
+        let dobmessage = document.getElementById('dobtooltip-text')
+        if ( validateDOB(dob.value)  && validateFile(cv.value) ){
+            
+            let data = new FormData( applicationForm )
+            axios.post( "{{url_for('apply')}}", data ).then( function( response ) {
+                if ( response.status === 200 ){
+                    let response = document.getElementById('response')
+                    response.innerText = "Your Application Was Successful. An email will be sent to you shortly conforming your application"
+                } 
+            })
+            modal.style.display = "block";
+        } else if( validateFile( cv.value ) == false && validateDOB(dob.value) ){
+            cv.className = "invalid-input"
+            cvmessage.innerText = "please attach a pdf or word document"
+            cvmessage.className = "tooltip-text"
+        } else if( validateDOB(dob.value) == false && validateFile(cv.value) ){
+            // display message to user and scroll to top for dob
+            dob.className = "invalid-input"
+            dobmessage.innerText = "please make sure you inputed valid year of birth"
+            dobmessage.className = "tooltip-text"
+            document.body.scrollTop = 0
+            document.documentElement.scrollTop = 0
+
+        } else if( validateDOB(dob.value) == false && validateFile( cv.value ) == false ) {
+            dob.className = "invalid-input"
+            cv.className = "invalid-input"
+            cvmessage.innerText = "please attach a pdf or word document"
+            cvmessage.className = "tooltip-text"
+            dobmessage.innerText = "please make sure you inputed valid year of birth"
+            dobmessage.className = "tooltip-text"
+            document.body.scrollTop = 0
+            document.documentElement.scrollTop = 0
+        }
+        
+        dob = document.getElementById('dob')
+        dob.addEventListener('focus', dobreset)  
+        cv = document.getElementById('cv')
+        cv.addEventListener('focus', cvreset)
+        
+        function dobreset(){
+            dob.className = ''
+        }
+
+        function cvreset(){
+            cv.className = ''
+        }
+        
+
+    }
+</script>
 
 </html>

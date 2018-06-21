@@ -258,7 +258,8 @@ def apply():
             workexperience += "{}. Worked at {} as {} since {}. ".format(i, request.form.get('organisation{}'.format(i)), request.form.get('position{}'.format(i)), request.form.get('timeframe{}'.format(i)) )
 
         db.applicants.insert({'name':name, 'contact details':contacts, 'sex':sex, 'age':age, 'academic qualifications':qualifications, 'awarding institute':institution, 'work experience':workexperience, 'curriculum vitae':cv, 'comments':comments, 'status':status, 'post':postSession})
-        return redirect(url_for('home'))
+        # return redirect(url_for('home'))
+        return 'Application Succesfull'
     return render_template('applicationform.html')
 
 @app.route('/applicantList')
