@@ -219,3 +219,7 @@ input[type=text], input[type=password]{
 #table3000 tr:hover {
 	background-color: #ddd;
 }
+.sendMessageBtn{
+	background-color: transparent;
+	text-align: center;
+}

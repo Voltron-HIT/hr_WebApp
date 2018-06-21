@@ -19,47 +19,51 @@
     </nav>
     <div class="space"> </div>
     <div class="main-wrapper">
-        <!--
-		<aside class="aside">
-			<ul>
-				<li>Finance Department</li>
-				<li>Maintenance Department</li>
-				<li>Catering Department</li>
-			</ul>
-		</aside>
-	-->
-        {% for p in post %}
-        <div class="main-container">
-            <fieldset class="expand">
-                <div class="vacancy-details">
-                    <h1 class="h3">{{p[0]}} </h1>
-                    <div class="description">
-                        <h4>Minimum Requirements</h4>
-                        {% for min in p[1] %}
-                        <ul>
-                            <li>{{ min }}</a>
-                            </li>
-                        </ul>
-                        {% endfor %}
+   {% if post == [] %}
+           <div  style="display:grid; grid-template-columns: 40% 50% 10%;">
+             <div class="empty container">
+             </div>
+           <div class="details-group">
+             <h1 style="font-family: 'Segoe'; color: gray;">No Vacancies Available</h1>
+           </div>
+           <div class="empty container">
+           </div>
+         </div>
+        {% else %}
+          {% for p in post %}
+          <div class="main-container">
+              <fieldset class="expand">
 
-                        <h4>Responsibilities</h4>
-                        {% for resp in p[2] %}
-                        <ul>
-                            <li>{{ resp }}</a>
-                            </li>
-                        </ul>
-                        {% endfor %}
+                  <div class="vacancy-details">
+                      <h1 class="h3">{{p[0]}} </h1>
+                      <div class="description">
+                          <h4>Minimum Requirements</h4>
+                          {% for min in p[1] %}
+                          <ul>
+                              <li>{{ min }}</a>
+                              </li>
+                          </ul>
+                          {% endfor %}
 
-                    </div>
-                </div>
+                          <h4>Responsibilities</h4>
+                          {% for resp in p[2] %}
+                          <ul>
+                              <li>{{ resp }}</a>
+                              </li>
+                          </ul>
+                          {% endfor %}
 
-                <div class="apply-now">
-                    <a href="{{p[3]}}">Apply Now</a>
-                </div>
+                      </div>
+                  </div>
 
-            </fieldset><br>
-        </div>
-        {% endfor %}
+                  <div class="apply-now">
+                      <a href="{{p[3]}}">Apply Now</a>
+                  </div>
+
+              </fieldset><br>
+          </div>
+          {% endfor %}
+        {% endif %}
     </div>
 </body>
 

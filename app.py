@@ -3,6 +3,7 @@ import bcrypt
 import pandas as pd
 import collections
 import smsConfig
+import re
 from bson import Binary
 from functools import wraps
 from datetime import datetime, date
@@ -78,6 +79,8 @@ def home():
 @app.route('/humanResourceHome')
 @login_required
 def humanResourceHome():
+    global postSession
+    postSession = ""
     status = None
     post = db.Vacancies.find()
     vac = []
@@ -87,6 +90,8 @@ def humanResourceHome():
         minimum_requirements = i['minimum requirements']
         responsibilities = i['responsibilities']
         deadline = i['deadline']
+        add_url = url_for('temporary', token = position, _external = False)
+        edit_url = url_for('edit', token = position, _external = False)
 
         current = datetime.now()
 
@@ -95,7 +100,7 @@ def humanResourceHome():
         else:
             status = "Expired Vacancy"
 
-        vac.append((position, minimum_requirements, responsibilities, deadline, status))
+        vac.append((position, minimum_requirements, responsibilities, deadline, status, add_url, edit_url))
 
     return render_template('hr.html', post=vac)
 
@@ -109,44 +114,48 @@ def addVacancy():
         responsibilities = (request.form.get('responsibilities')).split("\r\n")
 
         dateOfDeadline = request.form.get('deadline')
-        dateOfInterview = request.form.get('interviewdate')
 
-        currentDate = dateOfDeadline.split("-")
-        dob = dateOfInterview.split("-")
+        deadlineDate = dateOfDeadline.split("-")
+
         c = []
-        d = []
 
-        for i in currentDate:
+        for i in deadlineDate:
             c.append(int(i))
-        for i in dob:
-            d.append(int(i))
 
-        interview = datetime(c[0], c[1], c[2], 11, 59, 59)
-        deadline = datetime(d[0], d[1], d[2], 11, 59, 59)
+        deadline = datetime(c[0], c[1], c[2], 11, 59, 59)
+        db.Vacancies.insert({"post":post, "department":department, "deadline":deadline, "minimum requirements":requirements, "responsibilities":responsibilities})
 
-        adjudicators = []
-        for i in range(1, int(request.form.get('numberOfFields')) + 1):
-            name = request.form.get('name{}'.format(i))
-            email = request.form.get('email{}'.format(i))
-            position = request.form.get('adjudicatorpost{}'.format(i))
-            adjDepartment = request.form.get('adjudicatordepartment{}'.format(i))
-
-            if db.Adjudicators.find_one({"name":name, "email":email}) is None:
-                db.Adjudicators.insert({"name":name, "email":email, "position":position, "department":department})
-
-            adjudicators.append([name, email, position, adjDepartment])
-
-        db.Vacancies.insert({"post":post, "department":department, "deadline":deadline, "interview date":interview, "minimum requirements":requirements, "responsibilities":responsibilities, "adjudicators":adjudicators})
-        #db.Vacancies.insert({"post":post, "department":department, "minimum requirements":requirements, "responsibilities":responsibilities, "adjudicators":adjudicators})
     return render_template('addvacancy.html')
 
-@app.route('/adjudication')
-def adjudication():
-	return render_template('adjudication.html')
-
-@app.route('/shortlist')
+@app.route('/shortlist', methods=('GET', 'POST'))
 def shortlist():
-    return render_template('shortlist.html')
+    app.jinja_env.globals.update(zip=zip)
+    post = postSession
+    query = db.applicants.find({"post":post, "$or": [{"status":"new"}, {"status":"reserved"}]})
+
+    applicants = []
+    x = []
+
+    for i in query:
+        applicants.append(i['name'])
+
+    for i in range(len(applicants)):
+        x.append(i)
+
+    if request.method == 'POST':
+        for i in x:
+            if request.form.get(str(i)) == 'shortlist':
+                name = applicants[i]
+                db.applicants.update({"name":name}, {"$set":{"status":"shortlist"}})
+            if request.form.get(str(i)) == 'denied':
+                name = applicants[i]
+                db.applicants.update({"name":name}, {"$set":{"status":"denied"}})
+
+        #sending emails for rejection and acceptance
+
+
+        return redirect(url_for('humanResourceHome'))
+    return render_template('shortlist.html', x=x, y=applicants)
 
 @app.route('/resetPassword')
 def resetPassword():
@@ -200,6 +209,20 @@ def test(token):
 	global postSession
 	postSession = token
 	return redirect(url_for('apply'))
+
+@app.route('/temporary/<token>')
+def temporary(token):
+	'''keeps track of all the posts clicked for application or for editing vacancy'''
+	global postSession
+	postSession = token
+	return redirect(url_for('shortlist'))
+
+@app.route('/edit/<token>')
+def edit(token):
+	'''keeps track of all the posts clicked for application or for editing vacancy'''
+	global postSession
+	postSession = token
+	return redirect(url_for('editVacancy'))
 
 @app.route('/newPasswordEntry', methods=('GET', 'POST'))
 def newPasswordEntry():
@@ -257,8 +280,12 @@ def apply():
         for i in range(1, int(request.form.get('numberOfWorkExperiences')) + 1):
             workexperience += "{}. Worked at {} as {} since {}. ".format(i, request.form.get('organisation{}'.format(i)), request.form.get('position{}'.format(i)), request.form.get('timeframe{}'.format(i)) )
 
-        db.applicants.insert({'name':name, 'contact details':contacts, 'sex':sex, 'age':age, 'academic qualifications':qualifications, 'awarding institute':institution, 'work experience':workexperience, 'curriculum vitae':cv, 'comments':comments, 'status':status, 'post':postSession})
-        return redirect(url_for('home'))
+            user = db.applicants.find_one({'National_id':request.form.get('nationalid')})
+
+            if user == None :
+	            db.applicants.insert({'name':name, 'contact details':contacts, 'sex':sex, 'age':age,'National_id':request.form.get('nationalid'), 'academic qualifications':qualifications, 'awarding institute':institution, 'work experience':workexperience, 'curriculum vitae':cv, 'comments':comments, 'status':status, 'post':postSession})
+            return "application succesful"
+
     return render_template('applicationform.html')
 
 @app.route('/applicantList')
@@ -318,45 +345,62 @@ def login():
 
     return render_template('login.html', Error_Message=error_message, System_Name="")
 
-	
-@app.route('/adjudicate')
-@login_required
-def adjudicate():
-	class Adjudication(db.Model):
-		__tablename__ = 'adjudication'
-		
-		id = db.Column(db.Integer, primary_key=True)
-		name = db.Column(db.String(60), index=True)
-		contactdetails = db.Column(db.String(60), index=True)
-		marks = db.column(db.String(60), index=True)
+@app.route('/editVacancy', methods=('GET', 'POST'))
+def editVacancy():
 
-		
+    post = postSession
+    query = db.Vacancies.find_one({"post":post})
+
+    posts = []
+    posts.extend((query['post'], query['department'], "\r\n".join(query['minimum requirements']), "\r\n".join(query['responsibilities']), (query['deadline']).date(), (query['interview date']).date()))
+
+    if request.method == 'POST':
+
+        dateOfDeadline = request.form.get('deadline')
+        dateOfInterview = request.form.get('interviewdate')
+
+        deadlineDate = dateOfDeadline.split("-")
+        c = []
+
+        for i in deadlineDate:
+            c.append(int(i))
+
+        deadline = datetime(c[0], c[1], c[2], 11, 59, 59)
+
+        requirements = (request.form.get('requirement').split('\r\n'))
+        responsibilities = (request.form.get('responsibilities').split('\r\n'))
+
+        db.Vacancies.update({"post":post}, {"$set":{"minimum requirements":requirements, "responsibilities":responsibilities, "deadline":deadline}})
+        return redirect(url_for('humanResourceHome'))
+
+    return render_template('editvacancy.html', post=posts)
+
 @app.route('/adduser')
 @login_required
 def adduser():
 	class Credentials(db.Model):
 		__tablename__ = 'credentials'
-		
+
 		id = db.Column(db.Integer, primary_key=True)
 		username = db.Column(db.String(60), index=True ,unique=True)
 		password = db.Column(db.String(60), index=True)
 		email = db.Column(db.String(60), index=True, unique=True)
-			
+
 
 @app.route('/addvancy')
 @login_required
 def addvacancy():
 	class Vacancy(db.Model):
 		__tablename__='vacancy'
-		
+
 		id = db.Column(db.Integer, primary_key=True)
 		post = db.Column(db.String(60), index=True ,unique=True)
 		department = db.Column(db.String(60), index=True)
 		deadline = db.Column(db.String(60), index=True)
 		mini_requirements = db.Column(db.String(60), index=True)
 		responsibilites = db.Column(db.String(60), index=True)
-	   
-	   # adjudicator details 
+
+	   # adjudicator details
 		name= db.Column(db.String(60), index=True)
 		adju_post=db.Column(db.String(60), index=True)
 		intervw_date=db.Column(db.datetime)

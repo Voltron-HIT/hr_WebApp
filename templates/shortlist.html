@@ -18,37 +18,49 @@
 	<div class="space"> </div>
 	<div class="container">
 	<br>
-	{% for _ in _ %}
-	<fieldset class="expand" id="expand">
-		<span><img src=""></span>
-		<div class="check">
-				<input type="checkbox"></input>
-		</div>
-		<div>
-			<h3>Name</h3>
-			<label>{{Name}}</label>
-			<label>Qualifications</label>
-			<div class="description">
-				<p>{{Qualifications}}</p>
-			</div>
-		</div>
-	</fieldset>
+	<form action="{{url_for('shortlist')}}" method=POST>
+	<table>
+	<tr>
+	    <td><h3>Name</h3></td>
+	    <td><h3>Decision</h3></td>
+	</tr>
+	{% for i, j in zip(x,y) %}
+    <tr>
+        <td><label>{{j}}</label></td>
+        <td><select name="{{i}}">
+            <option value="denied">Denied</option>
+            <option value="shortlist">Shortlist</option>
+        </select></td>
+    </tr>
+
 	{% endfor %}
+      </table>
+       <input type="submit" value="Complete Shortlisting">
+        </form>
 	</div>
+
+
 	<div class="sidebar">
 		<h2>Shortlist</h2>
+		<form class="messageForm" action="" method="post">
 		<table id="shortlist" class="table3000">
 			<tr>
 				<th class="first-col" colspan="2">Name</th>
-				<th class="last-col">Remove</th>
+				<th class="last-col">Email</th>
 			</tr>
-			{% for _ in _ %}
+		<!--	{% for _, _ in zip(names, emails) %}
 			<tr>
-				<td colspan="2">Tapiwa Muza</td>
-				<td><button type="submit" class="remove">Remove</button></td>
+				<td colspan="2">{{_}}</td>
+				<td>{{j}}</td>
+				{% endfor %}
+			</tr> -->
+			<tr>
+				<td colspan="3"><button type="submit" class="sendMessageBtn">Send Message</button></td>
 			</tr>
-			{% endfor %}
 		</table>
+
+
+		</form>
 	</div>
 </body>
 </html>

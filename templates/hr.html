@@ -14,22 +14,15 @@
         <div>
             <ul>
                 <li><a href="{{url_for('humanResourceHome')}}"><b>HOME</b></a></li>
-                <li><a href="{{url_for('applicantList')}}">VIEW APPLICANTS LIST</a></li>
+                <li><a href="{{url_for('applicantList')}}"><b>VIEW APPLICANTS LIST</b></a></li>
                 <li><a href="{{url_for('addVacancy')}}" type="button"><b>ADD VACANCY</b></a></li>
+                <li><a href="{{url_for('logout')}}" ><b>LOGOUT</b></a></li>
             </ul>
         </div>
     </nav>
     <div class="space"> </div>
     <div class="main-wrapper">
-        <!--
-		<aside class="aside">
-			<ul>
-				<li>Finance Department</li>
-				<li>Maintenance Department</li>
-				<li>Catering Department</li>
-			</ul>
-		</aside>
-	-->
+
         {% for p in post %}
         <div class="main-container">
             <fieldset class="expand">
@@ -57,10 +50,8 @@
                 </div>
                 <div class="edit-vacancy">
                     <ul>
-                        <li><a href="">Edit</a></li>
-                        <li><a href="#">Remove</a></li>
-                        <li><a href="{{url_for('shortlist')}}">Shortlist</a></li>
-                        <li><a href="{{url_for('adjudication')}}">Adjudicate</a></li>
+                        <li><a href="{{p[6]}}">Edit</a></li>
+                        <li><a href="{{p[5]}}">Shortlist</a></li>
                     </ul>
                 </div>
             </fieldset><br>

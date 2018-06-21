@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../static/addvacancystyle.css">
     <link rel="shortcut icon" href="..\static\favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <title>Add Vacancy</title>
+    <title>Edit Vacancy</title>
 </head>
 <body>
     <div class="nav-bar">
@@ -18,30 +18,30 @@
 
     <div class="heading">
         <img src="../static/img/hitlogo1.png" alt="">
-        <span> Add Vacancy </span>
+        <span> Edit Vacancy </span>
     </div>
 
     <div class="wrapper">
-        <form action="{{url_for('addVacancy')}}" method=POST>
+        <form action="{{url_for('editVacancy')}}" method=POST>
                 <div class="detail-group">
                     <h3>Vacancy Details</h3>
                     <div class="details">
                         <table>
                             <tr>
                                 <td> <label for="post">Post: </label> </td>
-                                <td>  <input type="text" name="post" id="" placeholder="Lecturer" required> </td>
+                                <td>  <input type="text" name="post" id="" placeholder="{{post[0]}}"  required readonly> </td>
                             </tr>
                             <tr>
                                 <td> <label for="department">Department: </label> </td>
-                                <td> <input type="text" name="department" id="" placeholder="Software Engineering" required>  </td>
+                                <td> <input type="text" name="department" id="" placeholder="{{post[1]}}" required readonly>  </td>
                             </tr>
                             <tr>
                                 <td style="vertical-align: top"> Minimum Requirements: </td>
-                                <td> <textarea name="requirement" id="" cols="100" rows="10"></textarea>  </td>
+                                <td> <textarea name="requirement" id="" cols="100" rows="10">{{post[2]}}</textarea>  </td>
                             </tr>
                             <tr>
                                 <td style="vertical-align: top"> Responsibilities: </td>
-                                <td> <textarea name="responsibilities" id="" cols="100" rows="10"></textarea> </td>
+                                <td> <textarea name="responsibilities" id="" cols="100" rows="10">{{post[3]}}</textarea> </td>
                             </tr>
                         </table>
 
@@ -53,13 +53,14 @@
                         <table id='specialdates'>
                           <tr>
                               <td> <label for="deadline">Proposed Deadline: </label> </td>
-                              <td> <input type="date" name="deadline" id="" required> </td>
+                              <td> <input type="date" name="deadline" id="" value="{{post[4]}}" required> </td>
                           </tr>
                         </table>
                 </div>
-                <button class="button submit-button" type="submit"> Post vacancy </button>
-        </form>
 
+                </div>
+                <button class="button submit-button" type="submit"> Complete Edit </button>
+        </form>
     </div>
 </body>
 
