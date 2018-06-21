@@ -1,80 +1,72 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>Shortlist</title>
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <title>Shortlist</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
-	<header style="background: url(../static/img/hit-home-1.jpg) 100% no-repeat; background-size: cover;">
-	</header>
-	<nav>
-		<div>
-			<ul>
-				<li><a href="{{url_for('humanResourceHome')}}"><b>HOME</b></a></li>
-				<li><a href="{{url_for('addVacancy')}}" type="button"><b>ADD VACANCY</b></a></li>
-			</ul>
-		</div>
-	</nav>
-	<div class="space"> </div>
-	<div class="container">
-	<br>
-	<form action="{{url_for('shortlist')}}" method=POST>
-	<table>
-	<tr>
-	    <td><h3>Name</h3></td>
-	    <td><h3>Decision</h3></td>
-	</tr>
-	{% for i, j in zip(x,y) %}
-    <tr>
-        <td><label>{{j}}</label></td>
-        <td><select name="{{i}}">
+    <header style="background: url(../static/img/hit-home-1.jpg) 100% no-repeat; background-size: cover;">
+    </header>
+    <nav>
+        <div>
+            <ul>
+                <li><a href="{{url_for('humanResourceHome')}}"><b>HOME</b></a></li>
+                <li><a href="{{url_for('addVacancy')}}" type="button"><b>ADD VACANCY</b></a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="space"> </div>
+    <div class="container">
+        <br>
+        <form action="{{url_for('shortlist')}}" method=POST>
+            <table class="table3000">
+                <tr>
+                    <td class="first-col" colspan="2">
+                        <h3>Name</h3>
+                    </td>
+                    <td class="last-col">
+                        <h3>Decision</h3>
+                    </td>
+                </tr>
+                {% for i, j in zip(x,y) %}
+                <tr>
+                    <td><label>{{j}}</label></td>
+                    <td><select name="{{i}}">
             <option value="denied">Denied</option>
             <option value="shortlist">Shortlist</option>
         </select></td>
-    </tr>
-<<<<<<< HEAD
-
-=======
-	
->>>>>>> 1536a87e63ac3434305a6d639278e06b20a7d041
-	{% endfor %}
-      </table>
-       <input type="submit" value="Complete Shortlisting">
+                </tr>
+                {% endfor %}
+            </table>
+            <input type="submit" value="Complete Shortlisting">
         </form>
-	</div>
-<<<<<<< HEAD
+    </div>
 
 
-	<div class="sidebar">
-=======
-	
-	
-	<!--<div class="sidebar">
->>>>>>> 1536a87e63ac3434305a6d639278e06b20a7d041
-		<h2>Shortlist</h2>
-		<form class="messageForm" action="" method="post">
-		<table id="shortlist" class="table3000">
+    <div class="sidebar">
+        <h2>Shortlist</h2>
+        <form class="messageForm" action="{{url_for('sendNotification')}}" method="post">
+            <table id="shortlist" class="table3000">
+                <tr>
+                    <th class="first-col" colspan="2">Name</th>
+                    <th class="last-col">Email</th>
+                </tr>
+                {% for i, j in zip(aApplicants, accepted) %}
 			<tr>
-				<th class="first-col" colspan="2">Name</th>
-				<th class="last-col">Email</th>
-			</tr>
-		<!--	{% for _, _ in zip(names, emails) %}
-			<tr>
-				<td colspan="2">{{_}}</td>
+				<td colspan="2">{{i}}</td>
 				<td>{{j}}</td>
 				{% endfor %}
-			</tr> -->
-			<tr>
-				<td colspan="3"><button type="submit" class="sendMessageBtn">Send Message</button></td>
 			</tr>
-		</table>
-<<<<<<< HEAD
+                <tr>
+                    <td colspan="3"><button type="submit" class="sendMessageBtn">Send Message</button></td>
+                </tr>
+            </table>
 
 
-		</form>
-	</div>
-=======
-	</div> -->
->>>>>>> 1536a87e63ac3434305a6d639278e06b20a7d041
+        </form>
+    </div>
 </body>
+
 </html>

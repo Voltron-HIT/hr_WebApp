@@ -16,12 +16,22 @@
                 <li><a href="{{url_for('humanResourceHome')}}"><b>HOME</b></a></li>
                 <li><a href="{{url_for('applicantList')}}"><b>VIEW APPLICANTS LIST</b></a></li>
                 <li><a href="{{url_for('addVacancy')}}" type="button"><b>ADD VACANCY</b></a></li>
-                <li><a href="{{url_for('logout')}}" ><b>LOGOUT</b></a></li>
+                <li><a href="{{url_for('logout')}}"><b>LOGOUT</b></a></li>
             </ul>
         </div>
     </nav>
     <div class="space"> </div>
     <div class="main-wrapper">
+
+      {% with messages = get_flashed_messages() %}
+       {% if messages %}
+            <ul>
+               {% for message in messages %}
+               <li><h4>{{ message }}<h4></li>
+               {% endfor %}
+            </ul>
+       {% endif %}
+      {% endwith %}
 
         {% for p in post %}
         <div class="main-container">
@@ -50,15 +60,8 @@
                 </div>
                 <div class="edit-vacancy">
                     <ul>
-<<<<<<< HEAD
                         <li><a href="{{p[6]}}">Edit</a></li>
                         <li><a href="{{p[5]}}">Shortlist</a></li>
-=======
-                        <li><a href="">Edit</a></li>
-                        <li><a href="#">Remove</a></li>
-                        <li><a href="{{p[5]}}">Shortlist</a></li>
-                        <li><a href="{{url_for('adjudication')}}">Adjudicate</a></li>
->>>>>>> 1536a87e63ac3434305a6d639278e06b20a7d041
                     </ul>
                 </div>
             </fieldset><br>

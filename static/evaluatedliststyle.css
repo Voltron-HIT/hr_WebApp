@@ -1,4 +1,6 @@
-
+table{
+  /* width: 1000px!important; */
+}
 thead{
     text-align: left;
     background-color: #00135d;
@@ -14,9 +16,11 @@ thead > tr{
 
 tbody > tr{
     height: 200px;
-} 
+}
 
-td{
+td {
+    width: auto;
+    border: 1px solid #00135d;
     padding: 10px;
 }
 
@@ -27,4 +31,3 @@ td{
 tr:nth-child(even) {
     background-color: #f2f2f2;
 }
-

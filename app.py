@@ -3,17 +3,19 @@ import bcrypt
 import pandas as pd
 import collections
 import smsConfig
+import emailConfig
 import re
 from bson import Binary
 from functools import wraps
 from datetime import datetime, date
 from itsdangerous import SignatureExpired, URLSafeTimedSerializer
 from twilio.rest import Client
-from flask import Flask, render_template, url_for, request, session, redirect
+from flask import Flask, render_template, url_for, request, session, redirect, flash
 from flask_mail import Mail,Message
 
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
+app.config['SECRET_KEY'] = b'b\x18&\xc1\xcf&\xbe\xbb\x8c\xfcBZ\xfd\xa4\x93N\xbe\xcdFoS%N\xb7q\xca\xd6X\xc0\x9a?\xec\x10oP\x08'
 
 mail = Mail(app)
 
@@ -90,14 +92,9 @@ def humanResourceHome():
         minimum_requirements = i['minimum requirements']
         responsibilities = i['responsibilities']
         deadline = i['deadline']
-<<<<<<< HEAD
         add_url = url_for('temporary', token = position, _external = False)
         edit_url = url_for('edit', token = position, _external = False)
 
-=======
-        apply_url = url_for('temporary', token = position, _external = False)
-		
->>>>>>> 1536a87e63ac3434305a6d639278e06b20a7d041
         current = datetime.now()
 
         if current < deadline:
@@ -105,11 +102,7 @@ def humanResourceHome():
         else:
             status = "Expired Vacancy"
 
-<<<<<<< HEAD
         vac.append((position, minimum_requirements, responsibilities, deadline, status, add_url, edit_url))
-=======
-        vac.append((position, minimum_requirements, responsibilities, deadline, status, apply_url))
->>>>>>> 1536a87e63ac3434305a6d639278e06b20a7d041
 
     return render_template('hr.html', post=vac)
 
@@ -133,7 +126,8 @@ def addVacancy():
 
         deadline = datetime(c[0], c[1], c[2], 11, 59, 59)
         db.Vacancies.insert({"post":post, "department":department, "deadline":deadline, "minimum requirements":requirements, "responsibilities":responsibilities})
-
+        flash('New Vacancy Successfully Added')
+        return redirect(url_for('humanResourceHome'))
     return render_template('addvacancy.html')
 
 @app.route('/shortlist', methods=('GET', 'POST'))
@@ -142,14 +136,18 @@ def shortlist():
     post = postSession
     query = db.applicants.find({"post":post, "$or": [{"status":"new"}, {"status":"reserved"}]})
 
-    applicants = []
-    x = []
+    applicants, x, accepted, aApplicants = ([], [], [], [])
 
     for i in query:
         applicants.append(i['name'])
 
     for i in range(len(applicants)):
         x.append(i)
+
+    query = db.applicants.find({'post':post, 'status':'shortlist'})
+    for i in query:
+        accepted.append(i['email'])
+        aApplicants.append(i['name'])
 
     if request.method == 'POST':
         for i in x:
@@ -162,35 +160,8 @@ def shortlist():
 
         #sending emails for rejection and acceptance
 
-<<<<<<< HEAD
-
-=======
-@app.route('/shortlist', methods=('GET', 'POST'))
-def shortlist():
-    app.jinja_env.globals.update(zip=zip)
-    post = postSession
-    query = db.applicants.find({"post":post, "$or": [{"status":"new"}, {"status":"reserved"}]})
-	
-    applicants = []
-    x = []
-	
-    for i in query:
-        applicants.append(i['name'])
-		
-    for i in range(len(applicants)):
-        x.append(i)
-		
-    if request.method == 'POST':
-        for i in x:
-            if request.form.get(str(i)) == 'shortlist':
-                name = applicants[i]
-                db.applicants.update({"name":name}, {"$set":{"status":"shortlist"}})
-            if request.form.get(str(i)) == 'denied':
-                name = applicants[i]
-                db.applicants.update({"name":name}, {"$set":{"status":"denied"}})
->>>>>>> 1536a87e63ac3434305a6d639278e06b20a7d041
-        return redirect(url_for('humanResourceHome'))
-    return render_template('shortlist.html', x=x, y=applicants)
+        return redirect(url_for('shortlist'))
+    return render_template('shortlist.html', x=x, y=applicants, accepted=accepted, aApplicants=aApplicants)
 
 @app.route('/resetPassword')
 def resetPassword():
@@ -244,13 +215,6 @@ def test(token):
 	global postSession
 	postSession = token
 	return redirect(url_for('apply'))
-	
-@app.route('/temporary/<token>')
-def temporary(token):
-	'''keeps track of all the posts clicked for application or for editing vacancy'''
-	global postSession
-	postSession = token
-	return redirect(url_for('shortlist'))
 
 @app.route('/temporary/<token>')
 def temporary(token):
@@ -281,7 +245,8 @@ def apply():
     if request.method == 'POST':
 
         name =  '''{} {}'''.format(request.form.get('firstname'),request.form.get('surname'))
-        contacts = '''{} , {} , {} , {} '''.format(request.form.get('phone1'), request.form.get('phone2') , request.form.get('email'), request.form.get('address'))
+        contacts = '''{} , {} , {}  '''.format(request.form.get('phone1'), request.form.get('phone2'), request.form.get('address'))
+        email = request.form.get('email')
         sex = request.form.get('sex')
 
         current = date.today()
@@ -312,7 +277,6 @@ def apply():
         if cv != "" or cv is not None:
             comments = "CV & Certificates attached"
 
-
         #applyFor = post
         status = "new"
 
@@ -321,22 +285,16 @@ def apply():
             institution += "{}. ".format(str(i)) + request.form.get('awardingInstitute{}'.format(i)) + ". "
         for i in range(1, int(request.form.get('numberOfWorkExperiences')) + 1):
             workexperience += "{}. Worked at {} as {} since {}. ".format(i, request.form.get('organisation{}'.format(i)), request.form.get('position{}'.format(i)), request.form.get('timeframe{}'.format(i)) )
-   
-            user = db.applicants.find_one({'National_id':request.form.get('nationalid')})
 
-<<<<<<< HEAD
-            user = db.applicants.find_one({'National_id':request.form.get('nationalid')})
+            user = db.applicants.find_one({'National_id':request.form.get('nationalid'), 'post':postSession})
 
             if user == None :
-	            db.applicants.insert({'name':name, 'contact details':contacts, 'sex':sex, 'age':age,'National_id':request.form.get('nationalid'), 'academic qualifications':qualifications, 'awarding institute':institution, 'work experience':workexperience, 'curriculum vitae':cv, 'comments':comments, 'status':status, 'post':postSession})
-            return "application succesful"
-
-=======
-            if user == None :
-	            db.applicants.insert({'name':name, 'contact details':contacts, 'sex':sex, 'age':age,'National_id':request.form.get('nationalid'), 'academic qualifications':qualifications, 'awarding institute':institution, 'work experience':workexperience, 'curriculum vitae':cv, 'comments':comments, 'status':status, 'post':postSession})
-            return "application succesfull"
-	
->>>>>>> 1536a87e63ac3434305a6d639278e06b20a7d041
+                db.applicants.insert({'name':name, 'contact details':contacts, 'sex':sex, 'age':age,'National_id':request.form.get('nationalid'), 'academic qualifications':qualifications, 'awarding institute':institution, 'work experience':workexperience, 'curriculum vitae':cv, 'comments':comments, 'status':status
+                , 'post':postSession, 'email':email})
+                flash('Application For Vacancy Was Successful')
+            else:
+                flash('Application For Vacancy Already Exists')
+                return redirect(url_for('home'))
     return render_template('applicationform.html')
 
 @app.route('/applicantList')
@@ -354,10 +312,12 @@ def applicantList():
         data.append(collections.OrderedDict(map(reversed, dictionary.items())))
 
     df = pd.DataFrame(data)
-    df = df.drop(["_id", "curriculum vitae", "status"], axis=1)
-    pd.set_option("max_colwidth", 500)
+    df = df.drop(["_id", "curriculum vitae", "status", "email", "awarding institute", "post"], axis=1)
+    df.index += 1
+    pd.set_option("max_colwidth", 1000)
+    df.style.set_properties( **{'width': '1500px'})
 
-    fullList = df.to_html()
+    fullList = df.to_html(classes="table table-striped table-hover")
     path = 'templates/applicantList/applicantlist.html'
     file = 'applicantList/applicantlist.html'
 
@@ -422,9 +382,46 @@ def editVacancy():
         responsibilities = (request.form.get('responsibilities').split('\r\n'))
 
         db.Vacancies.update({"post":post}, {"$set":{"minimum requirements":requirements, "responsibilities":responsibilities, "deadline":deadline}})
+        flash('Vacancy Edit Successful ')
         return redirect(url_for('humanResourceHome'))
 
     return render_template('editvacancy.html', post=posts)
+
+@app.route('/sendNotification', methods=('GET', 'POST'))
+def sendNotification():
+    post = postSession
+    accepted = []    # accepted applicants' emails
+    aApplicants = [] # accepted applicants' list
+
+    denied = []      # denied applicants' emails
+    dApplicants = [] # denied applicants' list
+
+    if request.method == 'POST':
+        time = request.form.get('time')
+        query = db.applicants.find({'post':post, 'status':'shortlist'})
+        for i in query:
+            accepted.append(i['email'])
+            aApplicants.append(i['name'])
+        query = db.applicants.find({'post':post, 'status':'denied'})
+        for i in query:
+            denied.append(i['email'])
+            dApplicants.append(i['name'])
+
+        #sending to accepted applicants
+        for i, j in zip(accepted, aApplicants):
+            msg = Message(emailConfig.aSubject.format(post), sender='achidzix',recipients=[i])
+            msg.body = emailConfig.aBody.format(j, time)
+            mail.send(msg)
+
+        #sending to denied applicants
+        for i, j in zip(denied, dApplicants):
+            msg = Message(emailConfig.dSubject.format(post), sender='achidzix',recipients=[i])
+            msg.body = emailConfig.dBody.format(j, post)
+            mail.send(msg)
+
+        db.applicants.delete_many({'post':post, 'status':'denied'})
+        flash('Emails Sent Successfully')
+    return redirect(url_for('humanResourceHome'))
 
 @app.route('/adduser')
 @login_required

@@ -18,39 +18,30 @@
         </div>
     </nav>
     <div class="space"> </div>
+    {% with messages = get_flashed_messages() %}
+     {% if messages %}
+          <ul>
+             {% for message in messages %}
+             <li><h4>{{ message }}<h4></li>
+             {% endfor %}
+          </ul>
+     {% endif %}
+    {% endwith %}
     <div class="main-wrapper">
-<<<<<<< HEAD
-   {% if post == [] %}
-           <div  style="display:grid; grid-template-columns: 40% 50% 10%;">
-             <div class="empty container">
-             </div>
-           <div class="details-group">
-             <h1 style="font-family: 'Segoe'; color: gray;">No Vacancies Available</h1>
-           </div>
-           <div class="empty container">
-           </div>
-         </div>
-        {% else %}
-          {% for p in post %}
-          <div class="main-container">
-              <fieldset class="expand">
-=======
-        <!--
-		<aside class="aside">
-			<ul>
-				<li>Finance Department</li>
-				<li>Maintenance Department</li>
-				<li>Catering Department</li>
-			</ul>
-		</aside>
-	-->
-        {% for p in post %}
+        {% if post == [] %}
+        <div style="display:grid; grid-template-columns: 40% 50% 10%;">
+            <div class="empty container">
+            </div>
+            <div class="details-group">
+                <h1 style="font-family: 'Segoe'; color: gray;">No Vacancies Available</h1>
+            </div>
+            <div class="empty container">
+            </div>
+        </div>
+        {% else %} {% for p in post %}
         <div class="main-container">
             <fieldset class="expand">
-                <div class="apply-now">
-                    <a href="{{p[3]}}">Apply Now</a>
-                </div>
-               
+
                 <div class="vacancy-details">
                     <h1 class="h3">{{p[0]}} </h1>
                     <div class="description">
@@ -61,44 +52,25 @@
                             </li>
                         </ul>
                         {% endfor %}
->>>>>>> 1536a87e63ac3434305a6d639278e06b20a7d041
 
-                  <div class="vacancy-details">
-                      <h1 class="h3">{{p[0]}} </h1>
-                      <div class="description">
-                          <h4>Minimum Requirements</h4>
-                          {% for min in p[1] %}
-                          <ul>
-                              <li>{{ min }}</a>
-                              </li>
-                          </ul>
-                          {% endfor %}
+                        <h4>Responsibilities</h4>
+                        {% for resp in p[2] %}
+                        <ul>
+                            <li>{{ resp }}</a>
+                            </li>
+                        </ul>
+                        {% endfor %}
 
-                          <h4>Responsibilities</h4>
-                          {% for resp in p[2] %}
-                          <ul>
-                              <li>{{ resp }}</a>
-                              </li>
-                          </ul>
-                          {% endfor %}
+                    </div>
+                </div>
 
-<<<<<<< HEAD
-                      </div>
-                  </div>
-=======
-                <!-- <div class="apply-now">
-                    
-                </div> -->
->>>>>>> 1536a87e63ac3434305a6d639278e06b20a7d041
+                <div class="apply-now">
+                    <a href="{{p[3]}}">Apply Now</a>
+                </div>
 
-                  <div class="apply-now">
-                      <a href="{{p[3]}}">Apply Now</a>
-                  </div>
-
-              </fieldset><br>
-          </div>
-          {% endfor %}
-        {% endif %}
+            </fieldset><br>
+        </div>
+        {% endfor %} {% endif %}
     </div>
 </body>
 
