@@ -90,9 +90,14 @@ def humanResourceHome():
         minimum_requirements = i['minimum requirements']
         responsibilities = i['responsibilities']
         deadline = i['deadline']
+<<<<<<< HEAD
         add_url = url_for('temporary', token = position, _external = False)
         edit_url = url_for('edit', token = position, _external = False)
 
+=======
+        apply_url = url_for('temporary', token = position, _external = False)
+		
+>>>>>>> 1536a87e63ac3434305a6d639278e06b20a7d041
         current = datetime.now()
 
         if current < deadline:
@@ -100,7 +105,11 @@ def humanResourceHome():
         else:
             status = "Expired Vacancy"
 
+<<<<<<< HEAD
         vac.append((position, minimum_requirements, responsibilities, deadline, status, add_url, edit_url))
+=======
+        vac.append((position, minimum_requirements, responsibilities, deadline, status, apply_url))
+>>>>>>> 1536a87e63ac3434305a6d639278e06b20a7d041
 
     return render_template('hr.html', post=vac)
 
@@ -153,7 +162,33 @@ def shortlist():
 
         #sending emails for rejection and acceptance
 
+<<<<<<< HEAD
 
+=======
+@app.route('/shortlist', methods=('GET', 'POST'))
+def shortlist():
+    app.jinja_env.globals.update(zip=zip)
+    post = postSession
+    query = db.applicants.find({"post":post, "$or": [{"status":"new"}, {"status":"reserved"}]})
+	
+    applicants = []
+    x = []
+	
+    for i in query:
+        applicants.append(i['name'])
+		
+    for i in range(len(applicants)):
+        x.append(i)
+		
+    if request.method == 'POST':
+        for i in x:
+            if request.form.get(str(i)) == 'shortlist':
+                name = applicants[i]
+                db.applicants.update({"name":name}, {"$set":{"status":"shortlist"}})
+            if request.form.get(str(i)) == 'denied':
+                name = applicants[i]
+                db.applicants.update({"name":name}, {"$set":{"status":"denied"}})
+>>>>>>> 1536a87e63ac3434305a6d639278e06b20a7d041
         return redirect(url_for('humanResourceHome'))
     return render_template('shortlist.html', x=x, y=applicants)
 
@@ -209,6 +244,13 @@ def test(token):
 	global postSession
 	postSession = token
 	return redirect(url_for('apply'))
+	
+@app.route('/temporary/<token>')
+def temporary(token):
+	'''keeps track of all the posts clicked for application or for editing vacancy'''
+	global postSession
+	postSession = token
+	return redirect(url_for('shortlist'))
 
 @app.route('/temporary/<token>')
 def temporary(token):
@@ -279,13 +321,22 @@ def apply():
             institution += "{}. ".format(str(i)) + request.form.get('awardingInstitute{}'.format(i)) + ". "
         for i in range(1, int(request.form.get('numberOfWorkExperiences')) + 1):
             workexperience += "{}. Worked at {} as {} since {}. ".format(i, request.form.get('organisation{}'.format(i)), request.form.get('position{}'.format(i)), request.form.get('timeframe{}'.format(i)) )
+   
+            user = db.applicants.find_one({'National_id':request.form.get('nationalid')})
 
+<<<<<<< HEAD
             user = db.applicants.find_one({'National_id':request.form.get('nationalid')})
 
             if user == None :
 	            db.applicants.insert({'name':name, 'contact details':contacts, 'sex':sex, 'age':age,'National_id':request.form.get('nationalid'), 'academic qualifications':qualifications, 'awarding institute':institution, 'work experience':workexperience, 'curriculum vitae':cv, 'comments':comments, 'status':status, 'post':postSession})
             return "application succesful"
 
+=======
+            if user == None :
+	            db.applicants.insert({'name':name, 'contact details':contacts, 'sex':sex, 'age':age,'National_id':request.form.get('nationalid'), 'academic qualifications':qualifications, 'awarding institute':institution, 'work experience':workexperience, 'curriculum vitae':cv, 'comments':comments, 'status':status, 'post':postSession})
+            return "application succesfull"
+	
+>>>>>>> 1536a87e63ac3434305a6d639278e06b20a7d041
     return render_template('applicationform.html')
 
 @app.route('/applicantList')

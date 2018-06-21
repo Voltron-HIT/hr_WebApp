@@ -19,6 +19,7 @@
     </nav>
     <div class="space"> </div>
     <div class="main-wrapper">
+<<<<<<< HEAD
    {% if post == [] %}
            <div  style="display:grid; grid-template-columns: 40% 50% 10%;">
              <div class="empty container">
@@ -33,6 +34,34 @@
           {% for p in post %}
           <div class="main-container">
               <fieldset class="expand">
+=======
+        <!--
+		<aside class="aside">
+			<ul>
+				<li>Finance Department</li>
+				<li>Maintenance Department</li>
+				<li>Catering Department</li>
+			</ul>
+		</aside>
+	-->
+        {% for p in post %}
+        <div class="main-container">
+            <fieldset class="expand">
+                <div class="apply-now">
+                    <a href="{{p[3]}}">Apply Now</a>
+                </div>
+               
+                <div class="vacancy-details">
+                    <h1 class="h3">{{p[0]}} </h1>
+                    <div class="description">
+                        <h4>Minimum Requirements</h4>
+                        {% for min in p[1] %}
+                        <ul>
+                            <li>{{ min }}</a>
+                            </li>
+                        </ul>
+                        {% endfor %}
+>>>>>>> 1536a87e63ac3434305a6d639278e06b20a7d041
 
                   <div class="vacancy-details">
                       <h1 class="h3">{{p[0]}} </h1>
@@ -53,8 +82,14 @@
                           </ul>
                           {% endfor %}
 
+<<<<<<< HEAD
                       </div>
                   </div>
+=======
+                <!-- <div class="apply-now">
+                    
+                </div> -->
+>>>>>>> 1536a87e63ac3434305a6d639278e06b20a7d041
 
                   <div class="apply-now">
                       <a href="{{p[3]}}">Apply Now</a>
